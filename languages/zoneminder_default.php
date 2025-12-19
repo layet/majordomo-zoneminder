@@ -9,6 +9,16 @@ $dictionary=array(
     'ZONEMINDER_COLUMN_ENABLED'=>'Enabled',
     'ZONEMINDER_COLUMN_ZONE_COUNT'=>'Zones',
     'ZONEMINDER_COLUMN_SOURCE'=>'Source',
+    'ZONEMINDER_COLUMN_HOUR'=>'Hour',
+    'ZONEMINDER_COLUMN_DAY'=>'Day',
+    'ZONEMINDER_COLUMN_WEEK'=>'Week',
+    'ZONEMINDER_COLUMN_MONTH'=>'Month',
+    'ZONEMINDER_DISKSPACE_B'=>'B',
+    'ZONEMINDER_DISKSPACE_KB'=>'KB',
+    'ZONEMINDER_DISKSPACE_MB'=>'MB',
+    'ZONEMINDER_DISKSPACE_GB'=>'GB',
+    'ZONEMINDER_DISKSPACE_TB'=>'TB',
+    'ZONEMINDER_BANDWIDTH_KBS'=>'kB/s',
 );
 
 foreach ($dictionary as $k=>$v) {
