@@ -1,0 +1,52 @@
+<div>
+    <!--# Логотип. #-->
+    <img src="../img/modules/zoneminder.png"  width="30" height="30">
+    &nbsp;&nbsp;&nbsp;
+    <!--# Кнопка 'Настройки'. #-->
+    <a class="btn btn-default" href="#api_settings" data-toggle="collapse"><i class="glyphicon glyphicon-cog"></i> Настройки</a>
+
+    <!--# Кнопка 'Обновить'. #-->
+    <a class="btn btn-default" href="?view_mode=refresh_monitors"><i class="glyphicon glyphicon-refresh"></i> Обновить список камер</a>
+    &nbsp;&nbsp;&nbsp;
+    <!--# Кнопка 'О модуле'. #-->
+    <div class="float-right">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <button class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#about">О модуле&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span></button>
+    <!--# Кнопка 'Справка'. #-->
+    <div class="float-right">&nbsp;&nbsp;&nbsp;</div>
+    <a href="?view_mode=test" class="btn btn-default btn-sm float-right" title="Справка"><i class="glyphicon glyphicon-question-sign"></i></a>
+</div>
+
+<!--# Выпадающее меню настроек. #-->
+[#inc settings.html#]
+<table align=center class="table table-hover table-condensed" style="margin-top: 1em;">
+<thead>
+    <tr>
+        <th><#LANG_ZONEMINDER_COLUMN_ID#></th>
+        <th><#LANG_ZONEMINDER_COLUMN_NAME#></th>
+        <th><#LANG_ZONEMINDER_COLUMN_FUNCTION#></th>
+        <th><#LANG_ZONEMINDER_COLUMN_SOURCE#></th>
+        <th><#LANG_ZONEMINDER_COLUMN_ZONE_COUNT#></th>
+        <th><#LANG_ZONEMINDER_COLUMN_ENABLED#></th>
+    </tr>
+</thead>
+<tbody>
+[#begin RESULT#]
+<tr>
+    <td>[#MONITOR_ID#]</td>
+    <td>
+        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 16px;">
+            <img src="[#SERVER_PROTO#]://[#SERVER_ADDRESS#]/zm/cgi-bin/nph-zms?scale=3&mode=single&monitor=[#MONITOR_ID#]" width="48" height="27">
+            <div style="display: flex; flex-direction: row; align-items: center; gap: 16px;">
+                <div style="width: 14px; height: 14px; border-radius: 7px; background: rgba(51, 202, 127, 1);"></div>
+                <span>[#NAME#]</span>
+            <div>
+        </div>
+    </td>
+    <td>[#FUNCTION#]</td>
+    <td>[#IP#]</td>
+    <td>[#ZONE_COUNT#]</td>
+    <td><input type="checkbox" [#if ENABLED="1"#]checked[#endif#] onclick="return false;"></td>
+</tr>
+[#end RESULT#]
+</tbody>
+</table>
