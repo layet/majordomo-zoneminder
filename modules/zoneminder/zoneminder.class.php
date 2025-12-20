@@ -59,6 +59,9 @@ class zoneminder extends module {
         if (isset($monitorname)) {
             $p["monitorname"]=$this->monitorname;
         }
+        if (isset($eventid)) {
+            $p["eventid"]=$this->eventid;
+        }
         return parent::saveParams($p);
     }
     /**
@@ -74,6 +77,7 @@ class zoneminder extends module {
         global $view_mode;
         global $monitor;
         global $monitorname;
+        global $eventid;
         if (isset($id)) {
             $this->id=$id;
         }
@@ -88,6 +92,9 @@ class zoneminder extends module {
         }
         if (isset($monitorname)) {
             $this->monitorname=$monitorname;
+        }
+        if (isset($eventid)) {
+            $this->eventid=$eventid;
         }
     }
     /**
@@ -176,6 +183,12 @@ class zoneminder extends module {
                 $event->Event->Length = $this->secondsToHMS((int)$event->Event->Length);
                 $out['EVENTS'][] = convertStdClassToArray($event->Event);
             }
+            if ($events->pagination->pageCount > 1) $out['PAGES'] = convertStdClassToArray($events->pagination);
+            echo "<pre>".print_r($out['PAGES'], true)."</pre>";
+        }
+
+        if ($this->view_mode == 'event') {
+            $out['EVENT'] = convertStdClassToArray($this->fetchEvent($this->eventid));
         }
 
         if ($this->view_mode == 'test') {
@@ -251,6 +264,30 @@ class zoneminder extends module {
 
     /**
      *
+     * Функция проксирования MJPEG
+     *
+     */
+    function videoMJPEG($eventid)
+    {
+        $file = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/cgi-bin/nph-zms?mode=jpeg&frame=1&scale=0&rate=100&maxfps=30&replay=none&source=event&event='.$eventid.'&rand='.rand(0,65535);
+        header('Content-Type: multipart/x-mixed-replace;boundary=ZoneMinderFrame');
+        readfile($file);
+    }
+
+    /**
+     *
+     * Функция проксирования MJPEG
+     *
+     */
+    function videoMPEG($eventid)
+    {
+        $file = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/index.php?mode=mpeg&format=h264&eid='.$eventid.'&view=view_video';
+        header('Content-Type: video/mp4');
+        readfile($file);
+    }
+
+    /**
+     *
      * Функция получения информации о камерах
      *
      */
@@ -267,7 +304,7 @@ class zoneminder extends module {
      * Функция получения списка событий
      *
      */
-    function fetchEvents($monitorId, $dateRange): StdClass
+    function fetchEvents($monitorId, $dateRange, $page = 1): StdClass
     {
         if (isset($monitorId) && isset($dateRange)) {
             switch ($dateRange) {
@@ -278,11 +315,24 @@ class zoneminder extends module {
                 default: $dateRange = '-1 hour';
             }
 
-            $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/events/index/MonitorId:'.$monitorId.'/StartDateTime>=:'.date("Y-m-d H:i:s", strtotime($dateRange)).'/EndDateTime<=:'.date("Y-m-d H:i:s").'.json';
+            $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/events/index/MonitorId:'.$monitorId.'/StartDateTime>=:'.date("Y-m-d H:i:s", strtotime($dateRange)).'/EndDateTime<=:'.date("Y-m-d H:i:s").'.json?page='.$page;
             $url_path = str_replace(' ', '%20', $url_path);
             $results = file_get_contents($url_path, false);
             return json_decode($results);
         }
+    }
+
+    /**
+     *
+     * Функция получения информации о событии
+     *
+     */
+    function fetchEvent($eventId): StdClass
+    {
+        $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/events/'.$eventId.'.json';
+        $results = file_get_contents($url_path, false);
+
+        return json_decode($results)->event->Event;
     }
 
     /**

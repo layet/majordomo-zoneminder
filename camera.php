@@ -23,5 +23,17 @@ if ($source != '') {
         if ($height == '') $height = 27;
         $zm->thumbnail($eventid, $width, $height);
     }
+
+    if ($source == 'mjpeg') {
+        $eventid = htmlspecialchars($_GET["eid"]);
+        if ($eventid == '') $eventid = 0;
+        $zm->videoMJPEG($eventid);
+    }
+
+    if ($source == 'mpeg') {
+        $eventid = htmlspecialchars($_GET["eid"]);
+        if ($eventid == '') $eventid = 0;
+        $zm->videoMPEG($eventid);
+    }
 }
 ?>

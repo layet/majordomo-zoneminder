@@ -15,7 +15,7 @@
   [#begin EVENTS#]
     <tr>
       <td style="text-align: center">[#Id#]</td>
-      <td style="text-align: center">[#Name#]</td>
+      <td style="text-align: center"><a href="?view_mode=event&eventid=[#Id#]">[#Name#]</a></td>
       <td>[#monitorname#]</td>
       <td style="text-align: center">[#StartDateTime#]</td>
       <td style="text-align: center">[#EndDateTime#]</td>
@@ -26,3 +26,8 @@
   [#end EVENTS#]
   </tbody>
 </table>
+[#if PAGES#]
+  [#begin PAGES#]
+    [#page#]
+  [#end PAGES#]
+[#endif PAGES#]
