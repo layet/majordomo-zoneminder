@@ -1,0 +1,28 @@
+<table align=center class="table table-hover table-condensed table-responsive" style="margin-top: 1em;">
+  <thead>
+  <tr>
+    <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_ID#></th>
+    <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_NAME#></th>
+    <th><#LANG_ZONEMINDER_COLUMN_MONITOR#></th>
+    <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_START_TIME#></th>
+    <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_END_TIME#></th>
+    <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_DURATION#></th>
+    <th><#LANG_ZONEMINDER_COLUMN_DISK_SPACE#></th>
+    <th><#LANG_ZONEMINDER_COLUMN_THUMBNAIL#></th>
+  </tr>
+  </thead>
+  <tbody>
+  [#begin EVENTS#]
+    <tr>
+      <td style="text-align: center">[#Id#]</td>
+      <td style="text-align: center">[#Name#]</td>
+      <td>[#monitorname#]</td>
+      <td style="text-align: center">[#StartDateTime#]</td>
+      <td style="text-align: center">[#EndDateTime#]</td>
+      <td style="text-align: center">[#Length#]</td>
+      <td>[#DiskSpace#]</td>
+      <td><img src="/camera.php?source=thumbnail&eid=[#Id#]&width=96&height=54" width="96" height="54"></td>
+    </tr>
+  [#end EVENTS#]
+  </tbody>
+</table>

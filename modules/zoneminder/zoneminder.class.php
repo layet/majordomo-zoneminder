@@ -1,16 +1,27 @@
 <?php
 /**
- * Query Library
+ * Zoneminder
  * @package project
- * @author Wizard <sergejey@gmail.com>
+ * @author Layet <layet@yandex.ru>
  * @copyright http://majordomo.smartliving.ru/ (c)
- * @version 0.1 (wizard, 12:07:48 [Jul 18, 2023])
+ * @version 0.1 (layet, 12:07:48 [Dec 20, 2025])
  */
 //
-//
+
+/**
+ *
+ * Функция для преобразования StdClass к массиву для шаблонизатора
+ *
+ */
+
+function convertStdClassToArray($source): array
+{
+    return json_decode(json_encode($source), true);
+}
+
 class zoneminder extends module {
     /**
-     * querylib
+     * zoneminder
      *
      * Module class constructor
      *
@@ -45,6 +56,9 @@ class zoneminder extends module {
         if (isset($monitor)) {
             $p["monitor"]=$this->monitor;
         }
+        if (isset($monitorname)) {
+            $p["monitorname"]=$this->monitorname;
+        }
         return parent::saveParams($p);
     }
     /**
@@ -59,6 +73,7 @@ class zoneminder extends module {
         global $mode;
         global $view_mode;
         global $monitor;
+        global $monitorname;
         if (isset($id)) {
             $this->id=$id;
         }
@@ -70,6 +85,9 @@ class zoneminder extends module {
         }
         if (isset($monitor)) {
             $this->monitor=$monitor;
+        }
+        if (isset($monitorname)) {
+            $this->monitorname=$monitorname;
         }
     }
     /**
@@ -94,7 +112,6 @@ class zoneminder extends module {
             $out['PARENT_NAME']=$this->owner->name;
         }
         $out['VIEW_MODE']=$this->view_mode;
-        $out['EDIT_MODE']=$this->edit_mode;
         $out['MODE']=$this->mode;
         $out['ACTION']=$this->action;
         $this->data=$out;
@@ -109,10 +126,6 @@ class zoneminder extends module {
      * @access public
      */
     function admin(&$out) {
-        //global $session;
-        //if ($this->owner->name=='panel') {
-        //    $out['CONTROLPANEL']=1;
-        //}
         $this->getConfig();
 
         $out['SERVER_PROTO']  =  $this->config['SERVER_PROTO'];
@@ -132,45 +145,37 @@ class zoneminder extends module {
         }
 
         if ($this->view_mode == '') {
-            $res = SQLSelect("SELECT * FROM `zoneminder_monitors` ORDER BY `ID` asc");
-            if ($res[0]['ID']) {
-                $info = $this->fetchMonitors();
-                foreach ($info as $monitor) {
-                    $id = $monitor->Monitor->Id;
-                    $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/monitors/daemonStatus/id:'.$id.'/daemon:zmc.json';
-                    $monitor->monitor_color = json_decode(file_get_contents($url_path, false))->status == 1 ? '#33CA7F' : '#FE5F55';
-                }
-                $total=count($res);
-                for($i=0;$i<$total;$i++) {
-                    // some action for every record if required
-                    //$tmp=explode(' ', $res[$i]['UPDATED']);
-                    //$res[$i]['UPDATED']=fromDBDate($tmp[0])." ".$tmp[1];
-                    $res[$i]['SERVER_PROTO'] = $out['SERVER_PROTO'];
-                    $res[$i]['SERVER_ADDRESS'] = $out['SERVER_ADDRESS'];
-                    $res[$i]['CAPTURE_FPS'] = $info[$i]->Monitor_Status->CaptureFPS;
-                    $res[$i]['CAPTURE_BANDWIDTH'] = sprintf("%03.2f ".LANG_ZONEMINDER_BANDWIDTH_KBS, $info[$i]->Monitor_Status->CaptureBandwidth / 1000);
-                    $res[$i]['MONITOR_COLOR'] = $info[$i]->monitor_color;
-                    $res[$i]['EVENTS_HOUR'] = $info[$i]->Event_Summary->HourEvents;
-                    $res[$i]['EVENTS_DAY'] = $info[$i]->Event_Summary->DayEvents;
-                    $res[$i]['EVENTS_WEEK'] = $info[$i]->Event_Summary->WeekEvents;
-                    $res[$i]['EVENTS_MONTH'] = $info[$i]->Event_Summary->MonthEvents;
-                    $res[$i]['EVENTS_HOUR_DISK_SPACE'] = $this->formatBytes($info[$i]->Event_Summary->HourEventDiskSpace);
-                    $res[$i]['EVENTS_DAY_DISK_SPACE'] = $this->formatBytes($info[$i]->Event_Summary->DayEventDiskSpace);
-                    $res[$i]['EVENTS_WEEK_DISK_SPACE'] = $this->formatBytes($info[$i]->Event_Summary->WeekEventDiskSpace);
-                    $res[$i]['EVENTS_MONTH_DISK_SPACE'] = $this->formatBytes($info[$i]->Event_Summary->MonthEventDiskSpace);
+            $info = $this->fetchMonitors();
+            foreach ($info as $monitor) {
+                $id = $monitor->Monitor->Id;
+                $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/monitors/daemonStatus/id:'.$id.'/daemon:zmc.json';
+                $monitor->Monitor->monitor_color = json_decode(file_get_contents($url_path, false))->status == 1 ? '#33CA7F' : '#FE5F55';
+                $monitor->Monitor->CaptureFPS = $monitor->Monitor_Status->CaptureFPS;
+                $monitor->Monitor->CaptureBandwidth = sprintf("%03.2f ".LANG_ZONEMINDER_BANDWIDTH_KBS, $monitor->Monitor_Status->CaptureBandwidth / 1000);
+                $pattern="/(\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3})/";
+                preg_match($pattern, $monitor->Monitor->Path, $matches);
+                $monitor->Monitor->IP = $matches[1];
+                $monitor->Monitor->HourEvents = $monitor->Event_Summary->HourEvents;
+                $monitor->Monitor->DayEvents = $monitor->Event_Summary->DayEvents;
+                $monitor->Monitor->WeekEvents = $monitor->Event_Summary->WeekEvents;
+                $monitor->Monitor->MonthEvents = $monitor->Event_Summary->MonthEvents;
+                $monitor->Monitor->HourEventDiskSpace = $this->formatBytes($monitor->Event_Summary->HourEventDiskSpace);
+                $monitor->Monitor->DayEventDiskSpace = $this->formatBytes($monitor->Event_Summary->DayEventDiskSpace);
+                $monitor->Monitor->WeekEventDiskSpace = $this->formatBytes($monitor->Event_Summary->WeekEventDiskSpace);
+                $monitor->Monitor->MonthEventDiskSpace = $this->formatBytes($monitor->Event_Summary->MonthEventDiskSpace);
 
-                }
-                $out['RESULT']=$res;
+                $out['MONITORS'][] = convertStdClassToArray($monitor->Monitor);
             }
         }
 
-        if ($this->view_mode == 'refresh_monitors') {
-            $this->refresh_monitors();
-            $this->redirect('?');
-        }
-
         if ($this->view_mode == 'events') {
-            echo "<pre>".print_r($this, true)."</pre>";
+            $events = $this->fetchEvents($this->monitor, $this->mode);
+            foreach ($events->events as $event) {
+                $event->Event->monitorname = $this->monitorname;
+                $event->Event->DiskSpace = $this->formatBytes($event->Event->DiskSpace);
+                $event->Event->Length = $this->secondsToHMS((int)$event->Event->Length);
+                $out['EVENTS'][] = convertStdClassToArray($event->Event);
+            }
         }
 
         if ($this->view_mode == 'test') {
@@ -185,7 +190,7 @@ class zoneminder extends module {
      * Функция для форматирования байтов в удобочитаемый формат
      *
      */
-    function formatBytes($bytes, $precision = 2) {
+    function formatBytes($bytes, $precision = 2): string {
         $units = array(LANG_ZONEMINDER_DISKSPACE_B, LANG_ZONEMINDER_DISKSPACE_KB, LANG_ZONEMINDER_DISKSPACE_MB, LANG_ZONEMINDER_DISKSPACE_GB, LANG_ZONEMINDER_DISKSPACE_TB);
         $bytes = max($bytes, 0);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
@@ -196,13 +201,26 @@ class zoneminder extends module {
 
     /**
      *
+     * Функция для форматирования секунд в Ч:М:С
+     *
+     */
+    function secondsToHMS(int $seconds): string {
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+        $remainingSeconds = $seconds % 60;
+
+        return sprintf("%02d:%02d:%02d", $hours, $minutes, $remainingSeconds);
+    }
+
+    /**
+     *
      * Тестовая функция
      *
      */
     function test()
     {
-        //$info = $this->fetchMonitors();
-        echo "<pre>".print_r(date("Y-m-d H:i:s", strtotime("-1 hour")), true)."</pre>";
+        $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/events/index/MonitorId:5/StartDateTime >=:'.date("Y-m-d H:i:s", strtotime("-1 hour")).'/EndDateTime <=:'.date("Y-m-d H:i:s").'.json';
+        echo "<pre>".print_r($url_path, true)."</pre>";
     }
 
     /**
@@ -221,10 +239,22 @@ class zoneminder extends module {
 
     /**
      *
+     * Функция проксирования картинки события
+     *
+     */
+    function thumbnail($eventid, $width, $height)
+    {
+        $file = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/index.php?eid='.$eventid.'&fid=snapshot&view=image&width='.$width.'&height='.$height;
+        header('Content-Type: image/jpeg');
+        readfile($file);
+    }
+
+    /**
+     *
      * Функция получения информации о камерах
      *
      */
-    function fetchMonitors()
+    function fetchMonitors(): array
     {
         $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/monitors.json';
         $results = file_get_contents($url_path, false);
@@ -234,33 +264,24 @@ class zoneminder extends module {
 
     /**
      *
-     * Обновить список камер
+     * Функция получения списка событий
      *
      */
-    function refresh_monitors()
+    function fetchEvents($monitorId, $dateRange): StdClass
     {
-        $results = $this->fetchMonitors();
+        if (isset($monitorId) && isset($dateRange)) {
+            switch ($dateRange) {
+                case 'hour': $dateRange = '-1 hour'; break;
+                case 'day': $dateRange = '-1 day'; break;
+                case 'week': $dateRange = '-1 week'; break;
+                case 'month': $dateRange = '-1 month'; break;
+                default: $dateRange = '-1 hour';
+            }
 
-        $monitors = array();
-        $pattern="/(\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3})/";
-
-        foreach ($results as $result) {
-
-            $monitors[$result->Monitor->Id] = SQLSelectOne("SELECT `ID`, `MONITOR_ID`, `NAME`, `FUNCTION`, `ENABLED`, `ZONE_COUNT`, `STATUS`, `CAPTURE_FPS`, `CAPTURE_BANDWIDTH`, `IP` FROM `zoneminder_monitors` WHERE `MONITOR_ID`=".$result->Monitor->Id);
-
-            $monitors[$result->Monitor->Id]['MONITOR_ID'] = $result->Monitor->Id;
-            $monitors[$result->Monitor->Id]['NAME'] = $result->Monitor->Name;
-            $monitors[$result->Monitor->Id]['FUNCTION'] = $result->Monitor->Function;
-            $monitors[$result->Monitor->Id]['ENABLED'] = $result->Monitor->Enabled;
-            $monitors[$result->Monitor->Id]['ZONE_COUNT'] = $result->Monitor->ZoneCount;
-            $monitors[$result->Monitor->Id]['STATUS'] = $result->Monitor_Status->Status;
-            $monitors[$result->Monitor->Id]['CAPTURE_FPS'] = $result->Monitor_Status->CaptureFPS;
-            $monitors[$result->Monitor->Id]['CAPTURE_BANDWIDTH'] = $result->Monitor_Status->CaptureBandwidth;
-            preg_match($pattern, $result->Monitor->Path, $matches);
-            $monitors[$result->Monitor->Id]['IP'] = $matches[1];
-            $monitors[$result->Monitor->Id]['MODIFIED_ON'] = date("Y-m-d H:i:s");
-
-            SQLInsertUpdate('zoneminder_monitors', $monitors[$result->Monitor->Id]);
+            $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/events/index/MonitorId:'.$monitorId.'/StartDateTime>=:'.date("Y-m-d H:i:s", strtotime($dateRange)).'/EndDateTime<=:'.date("Y-m-d H:i:s").'.json';
+            $url_path = str_replace(' ', '%20', $url_path);
+            $results = file_get_contents($url_path, false);
+            return json_decode($results);
         }
     }
 

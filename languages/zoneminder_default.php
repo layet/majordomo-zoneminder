@@ -19,6 +19,12 @@ $dictionary=array(
     'ZONEMINDER_DISKSPACE_GB'=>'GB',
     'ZONEMINDER_DISKSPACE_TB'=>'TB',
     'ZONEMINDER_BANDWIDTH_KBS'=>'kB/s',
+    'ZONEMINDER_COLUMN_MONITOR'=>'Monitor',
+    'ZONEMINDER_COLUMN_START_TIME'=>'Start Time',
+    'ZONEMINDER_COLUMN_END_TIME'=>'End Time',
+    'ZONEMINDER_COLUMN_DURATION'=>'Duration',
+    'ZONEMINDER_COLUMN_DISK_SPACE'=>'Disk Space',
+    'ZONEMINDER_COLUMN_THUMBNAIL'=>'Thumbnail',
 );
 
 foreach ($dictionary as $k=>$v) {

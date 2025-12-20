@@ -1,0 +1,65 @@
+<table align=center class="table table-hover table-condensed table-responsive" style="margin-top: 1em;">
+  <thead>
+  <tr>
+    <th><#LANG_ZONEMINDER_COLUMN_ID#></th>
+    <th><#LANG_ZONEMINDER_COLUMN_NAME#></th>
+    <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_FUNCTION#></th>
+    <th><#LANG_ZONEMINDER_COLUMN_SOURCE#></th>
+    <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_HOUR#></th>
+    <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_DAY#></th>
+    <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_WEEK#></th>
+    <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_MONTH#></th>
+    <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_ENABLED#></th>
+  </tr>
+  </thead>
+  <tbody>
+
+  [#begin MONITORS#]
+  <tr>
+    <td>[#Id#]</td>
+    <td>
+      <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
+        <div><img src="/camera.php?scale=3&id=[#Id#]" width="48" height="27"></div>
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 16px;">
+          <div style="width: 14px; height: 14px; border-radius: 7px; background: [#monitor_color#];"></div>
+          <span style="font-weight: 600;">[#Name#]</span>
+        </div>
+      </div>
+    </td>
+    <td style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span style="font-weight: 600;">[#Function#]</span>
+        <span style="font-size: 0.8em;">[#CaptureFPS#] fps&nbsp;[#CaptureBandwidth#]</span>
+      </div>
+    </td>
+    <td>[#IP#]</td>
+    <td style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span><a href="?view_mode=events&monitor=[#Id#]&mode=hour&monitorname=[#Name#]">[#HourEvents#]</a></span>
+        <span style="font-size: 0.8em;">[#HourEventDiskSpace#]</span>
+      </div>
+    </td>
+    <td style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span>[#DayEvents#]</span>
+        <span style="font-size: 0.8em;">[#DayEventDiskSpace#]</span>
+      </div>
+    </td>
+    <td style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span>[#WeekEvents#]</span>
+        <span style="font-size: 0.8em;">[#WeekEventDiskSpace#]</span>
+      </div>
+    </td>
+    <td style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span>[#MonthEvents#]</span>
+        <span style="font-size: 0.8em;">[#MonthEventDiskSpace#]</span>
+      </div>
+    </td>
+    <td style="text-align: center"><input type="checkbox" [#if Enabled="1"#]checked[#endif#] onclick="return false;"></td>
+  </tr>
+  [#end MONITORS#]
+
+  </tbody>
+</table>

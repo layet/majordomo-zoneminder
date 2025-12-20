@@ -5,9 +5,6 @@
     <!--# Кнопка 'Настройки'. #-->
     <a class="btn btn-default" href="#api_settings" data-toggle="collapse"><i class="glyphicon glyphicon-cog"></i> Настройки</a>
 
-    <!--# Кнопка 'Обновить'. #-->
-    <a class="btn btn-default" href="?view_mode=refresh_monitors"><i class="glyphicon glyphicon-refresh"></i> Обновить список камер</a>
-    &nbsp;&nbsp;&nbsp;
     <!--# Кнопка 'О модуле'. #-->
     <div class="float-right">&nbsp;&nbsp;&nbsp;&nbsp;</div>
     <button class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#about">О модуле&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span></button>
@@ -18,66 +15,14 @@
 
 <!--# Выпадающее меню настроек. #-->
 [#inc settings.html#]
-<table align=center class="table table-hover table-condensed table-responsive" style="margin-top: 1em;">
-<thead>
-    <tr>
-        <th><#LANG_ZONEMINDER_COLUMN_ID#></th>
-        <th><#LANG_ZONEMINDER_COLUMN_NAME#></th>
-        <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_FUNCTION#></th>
-        <th><#LANG_ZONEMINDER_COLUMN_SOURCE#></th>
-        <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_HOUR#></th>
-        <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_DAY#></th>
-        <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_WEEK#></th>
-        <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_MONTH#></th>
-        <th style="text-align: center"><#LANG_ZONEMINDER_COLUMN_ENABLED#></th>
-    </tr>
-</thead>
-<tbody>
-[#begin RESULT#]
-<tr>
-    <td>[#MONITOR_ID#]</td>
-    <td>
-        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
-            <div><img src="/camera.php?scale=3&id=[#MONITOR_ID#]" width="48" height="27"></div>
-            <div style="display: flex; flex-direction: row; align-items: center; gap: 16px;">
-                <div style="width: 14px; height: 14px; border-radius: 7px; background: [#MONITOR_COLOR#];"></div>
-                <span style="font-weight: 600;">[#NAME#]</span>
-            </div>
-        </div>
-    </td>
-    <td style="text-align: center">
-        <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
-            <span style="font-weight: 600;">[#FUNCTION#]</span>
-            <span style="font-size: 0.8em;">[#CAPTURE_FPS#] fps&nbsp;[#CAPTURE_BANDWIDTH#]</span>
-        </div>
-    </td>
-    <td>[#IP#]</td>
-    <td style="text-align: center">
-        <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
-            <span><a href="?view_mode=events&monitor=[#MONITOR_ID#]&mode=hour">[#EVENTS_HOUR#]</a></span>
-            <span style="font-size: 0.8em;">[#EVENTS_HOUR_DISK_SPACE#]</span>
-        </div>
-    </td>
-    <td style="text-align: center">
-        <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
-            <span>[#EVENTS_DAY#]</span>
-            <span style="font-size: 0.8em;">[#EVENTS_DAY_DISK_SPACE#]</span>
-        </div>
-    </td>
-    <td style="text-align: center">
-        <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
-            <span>[#EVENTS_WEEK#]</span>
-            <span style="font-size: 0.8em;">[#EVENTS_WEEK_DISK_SPACE#]</span>
-        </div>
-    </td>
-    <td style="text-align: center">
-        <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
-            <span>[#EVENTS_MONTH#]</span>
-            <span style="font-size: 0.8em;">[#EVENTS_MONTH_DISK_SPACE#]</span>
-        </div>
-    </td>
-    <td style="text-align: center"><input type="checkbox" [#if ENABLED="1"#]checked[#endif#] onclick="return false;"></td>
-</tr>
-[#end RESULT#]
-</tbody>
-</table>
+
+<!--# Страница со списком камер #-->
+[#if VIEW_MODE="test" || VIEW_MODE=""#]
+    [#inc zoneminder_monitors.html#]
+[#endif VIEW_MODE#]
+
+<!--# Страница со списком событий #-->
+[#if VIEW_MODE="events"#]
+    [#inc zoneminder_events.html#]
+[#endif VIEW_MODE#]
+

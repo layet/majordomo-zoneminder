@@ -6,7 +6,22 @@ include_once(DIR_MODULES . "zoneminder/zoneminder.class.php");
 
 $monitor = htmlspecialchars($_GET["id"]);
 $scale = htmlspecialchars($_GET["scale"]);
+$source = htmlspecialchars($_GET["source"]);
 
 $zm = new zoneminder();
-$zm->image($monitor, $scale);
+if ($monitor != '' && $scale != '') {
+    $zm->image($monitor, $scale);
+}
+
+if ($source != '') {
+    if ($source == 'thumbnail') {
+        $eventid = htmlspecialchars($_GET["eid"]);
+        if ($eventid == '') $eventid = 0;
+        $width = htmlspecialchars($_GET["width"]);
+        if ($width == '') $width = 48;
+        $height= htmlspecialchars($_GET["height"]);
+        if ($height == '') $height = 27;
+        $zm->thumbnail($eventid, $width, $height);
+    }
+}
 ?>
