@@ -1,0 +1,57 @@
+<style>
+    .zm-button {
+        width: 36px;
+        height: 36px;
+        border: 1px solid rgba(205, 209, 220, 0.1);
+        border-radius: 10px;
+        background: rgba(205, 209, 220, 0.16);
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .zm-button.zm-enabled {
+        background: rgba(205, 209, 220, 0.86);
+    }
+</style>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+    <h3>[#name#]</h3>
+    <div><img id="videoStream" src="/camera.php?id=[#monitor#]&scale=100" data-src="/camera.php?id=[#monitor#]&scale=100" style="width: 100%;"></div>
+    <div style="display: flex; flex-direction: row; gap: 8px;">
+        <div class="zm-button zm-enabled" onclick="zm_play(this);">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.000000" height="24.000000" fill="none">
+                <rect id="play" width="24.000000" height="24.000000" x="0.000000" y="0.000000" />
+                <path id="Icon" d="M7 17.9383C7 19.5977 8.90418 20.5353 10.2194 19.5236L17.9392 13.5853C18.9799 12.7847 18.9799 11.2154 17.9392 10.4148L10.2194 4.47654C8.90418 3.46482 7 4.40244 7 6.06179L7 17.9383Z" fill-rule="nonzero" stroke="rgb(66,66,66)" stroke-linecap="round" stroke-width="2" />
+            </svg>
+        </div>
+        <div class="zm-button" onclick="zm_pause(this);">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.000000" height="24.000000" fill="none">
+                <rect id="pause " width="24.000000" height="24.000000" x="0.000000" y="0.000000" />
+                <path id="Icon" d="M10 18C10 19.1046 9.10457 20 8 20C6.89543 20 6 19.1046 6 18L6 6C6 4.89543 6.89543 4 8 4C9.10457 4 10 4.89543 10 6L10 18ZM18 18C18 19.1046 17.1046 20 16 20C14.8954 20 14 19.1046 14 18L14 6C14 4.89543 14.8954 4 16 4C17.1046 4 18 4.89543 18 6L18 18Z" fill-rule="evenodd" stroke="rgb(66,66,66)" stroke-width="2" />
+            </svg>
+        </div>
+    </div>
+    <div><pre>[#DEBUG#]</pre></div>
+</div>
+<script>
+    var isPaused = false;
+    var videoStreamTimer = setInterval(function () {
+        var $img = $('#videoStream');
+        if (!isPaused) $img.attr('src', $img.attr('data-src')+'&rand='+Math.random());
+    }, [#interval#]);
+
+    function zm_play(e) {
+        if (!isPaused) return;
+        $('.zm-button').removeClass('zm-enabled');
+        $(e).addClass('zm-enabled');
+        isPaused = false;
+    }
+
+    function zm_pause(e) {
+        if (isPaused) return;
+        $('.zm-button').removeClass('zm-enabled');
+        $(e).addClass('zm-enabled');
+        isPaused = true;
+    }
+</script>

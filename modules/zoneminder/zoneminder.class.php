@@ -65,6 +65,9 @@ class zoneminder extends module {
         if (isset($page)) {
             $p["page"]=$this->page;
         }
+        /*if (isset($interval)) {
+            $p["interval"]=$this->interval;
+        }*/
         return parent::saveParams($p);
     }
     /**
@@ -82,6 +85,7 @@ class zoneminder extends module {
         global $monitorname;
         global $eventid;
         global $page;
+        global $interval;
         if (isset($id)) {
             $this->id=$id;
         }
@@ -102,6 +106,9 @@ class zoneminder extends module {
         }
         if (isset($page)) {
             $this->page=$page;
+        }
+        if (isset($interval)) {
+            $this->interval=$interval;
         }
     }
     /**
@@ -132,6 +139,21 @@ class zoneminder extends module {
         $p=new parser(DIR_TEMPLATES.$this->name."/".$this->name.".html", $this->data, $this);
         $this->result=$p->result;
     }
+
+    /**
+     * FrontEnd
+     *
+     * Module frontend
+     *
+     * @access public
+     */
+    function usual(&$out) {
+        $monitor = $this->fetchMonitor($this->monitor);
+        $out["monitor"] = $this->monitor;
+        $out["name"] = $monitor->Monitor->Name;
+        if (isset($this->interval)) $out["interval"] = $this->interval; else $out["interval"] = 1000;
+    }
+
     /**
      * BackEnd
      *
@@ -332,9 +354,22 @@ class zoneminder extends module {
     function fetchMonitors(): array
     {
         $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/monitors.json';
+
+        $results = file_get_contents($url_path, false);
+        return json_decode($results)->monitors;
+    }
+
+    /**
+     *
+     * Функция получения информации о камере по ID
+     *
+     */
+    function fetchMonitor($id = 0): StdClass
+    {
+        $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/monitors/'.$id.'.json';
         $results = file_get_contents($url_path, false);
 
-        return json_decode($results)->monitors;
+        return json_decode($results)->monitor;
     }
 
     /**
@@ -373,16 +408,6 @@ class zoneminder extends module {
         return json_decode($results)->event->Event;
     }
 
-    /**
-     * FrontEnd
-     *
-     * Module frontend
-     *
-     * @access public
-     */
-    function usual(&$out) {
-        //$this->admin($out);
-    }
     /**
      * Install
      *
