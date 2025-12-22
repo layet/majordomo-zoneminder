@@ -4,7 +4,7 @@
  * @package project
  * @author Layet <layet@yandex.ru>
  * @copyright http://majordomo.smartliving.ru/ (c)
- * @version 0.1 (layet, 12:07:48 [Dec 20, 2025])
+ * @version 1.0 (layet, 12:07:48 [Dec 22, 2025])
  */
 //
 
