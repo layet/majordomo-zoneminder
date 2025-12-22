@@ -60,6 +60,38 @@
     <td style="text-align: center"><input type="checkbox" [#if Enabled="1"#]checked[#endif#] onclick="return false;"></td>
   </tr>
   [#end MONITORS#]
-
+  <tr>
+    <td>Total: [#TOTAL.count#]</td>
+    <td></td>
+    <td style="text-align: center">
+      [#TOTAL.bandwidth#]
+    </td>
+    <td></td>
+    <td style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span>[#TOTAL.HourEvents#]</span>
+        <span style="font-size: 0.8em;">[#TOTAL.HourEventDiskSpace#]</span>
+      </div>
+    </td>
+    <td style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span>[#TOTAL.DayEvents#]</span>
+        <span style="font-size: 0.8em;">[#TOTAL.DayEventDiskSpace#]</span>
+      </div>
+    </td>
+    <td style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span>[#TOTAL.WeekEvents#]</span>
+        <span style="font-size: 0.8em;">[#TOTAL.WeekEventDiskSpace#]</span>
+      </div>
+    </td>
+    <td style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span>[#TOTAL.MonthEvents#]</span>
+        <span style="font-size: 0.8em;">[#TOTAL.MonthEventDiskSpace#]</span>
+      </div>
+    </td>
+    <td></td>
+  </tr>
   </tbody>
 </table>

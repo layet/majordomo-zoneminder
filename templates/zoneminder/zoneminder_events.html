@@ -1,3 +1,4 @@
+[#if EVENTS#]
 <table align=center class="table table-hover table-condensed table-responsive" style="margin-top: 1em;">
   <thead>
   <tr>
@@ -26,8 +27,13 @@
   [#end EVENTS#]
   </tbody>
 </table>
-[#if PAGES#]
-  [#begin PAGES#]
-    [#page#]
-  [#end PAGES#]
-[#endif PAGES#]
+[#if Paginator#]
+<div style="display: flex; flex-direction: row; justify-content: center;">
+  [#Paginator#]
+</div>
+[#endif Paginator#]
+[#else#]
+<div style="display: flex; flex-direction: row; justify-content: center;">
+  <h3><#LANG_ZONEMINDER_NO_EVENTS_TEXT#></h3>
+</div>
+[#endif EVENTS#]

@@ -62,6 +62,9 @@ class zoneminder extends module {
         if (isset($eventid)) {
             $p["eventid"]=$this->eventid;
         }
+        if (isset($page)) {
+            $p["page"]=$this->page;
+        }
         return parent::saveParams($p);
     }
     /**
@@ -78,6 +81,7 @@ class zoneminder extends module {
         global $monitor;
         global $monitorname;
         global $eventid;
+        global $page;
         if (isset($id)) {
             $this->id=$id;
         }
@@ -95,6 +99,9 @@ class zoneminder extends module {
         }
         if (isset($eventid)) {
             $this->eventid=$eventid;
+        }
+        if (isset($page)) {
+            $this->page=$page;
         }
     }
     /**
@@ -150,7 +157,16 @@ class zoneminder extends module {
 
             $this->redirect('?');
         }
-
+        $out['TOTAL']['count'] = 0;
+        $out['TOTAL']['bandwidth'] = 0;
+        $out['TOTAL']['HourEvents'] = 0;
+        $out['TOTAL']['HourEventDiskSpace'] = 0;
+        $out['TOTAL']['DayEvents'] = 0;
+        $out['TOTAL']['DayEventDiskSpace'] = 0;
+        $out['TOTAL']['WeekEvents'] = 0;
+        $out['TOTAL']['WeekEventDiskSpace'] = 0;
+        $out['TOTAL']['MonthEvents'] = 0;
+        $out['TOTAL']['MonthEventDiskSpace'] = 0;
         if ($this->view_mode == '') {
             $info = $this->fetchMonitors();
             foreach ($info as $monitor) {
@@ -170,21 +186,43 @@ class zoneminder extends module {
                 $monitor->Monitor->DayEventDiskSpace = $this->formatBytes($monitor->Event_Summary->DayEventDiskSpace);
                 $monitor->Monitor->WeekEventDiskSpace = $this->formatBytes($monitor->Event_Summary->WeekEventDiskSpace);
                 $monitor->Monitor->MonthEventDiskSpace = $this->formatBytes($monitor->Event_Summary->MonthEventDiskSpace);
-
+                $out['TOTAL']['count'] = $out['TOTAL']['count'] + 1;
+                $out['TOTAL']['bandwidth'] = $out['TOTAL']['bandwidth'] + $monitor->Monitor_Status->CaptureBandwidth/1000;
+                $out['TOTAL']['HourEvents'] = $out['TOTAL']['HourEvents'] + $monitor->Event_Summary->HourEvents;
+                $out['TOTAL']['HourEventDiskSpace'] = $out['TOTAL']['HourEventDiskSpace'] +  $monitor->Event_Summary->HourEventDiskSpace;
+                $out['TOTAL']['DayEvents'] = $out['TOTAL']['DayEvents'] + $monitor->Event_Summary->DayEvents;
+                $out['TOTAL']['DayEventDiskSpace'] = $out['TOTAL']['DayEventDiskSpace'] +  $monitor->Event_Summary->DayEventDiskSpace;
+                $out['TOTAL']['WeekEvents'] = $out['TOTAL']['WeekEvents'] + $monitor->Event_Summary->WeekEvents;
+                $out['TOTAL']['WeekEventDiskSpace'] = $out['TOTAL']['WeekEventDiskSpace'] +  $monitor->Event_Summary->WeekEventDiskSpace;
+                $out['TOTAL']['MonthEvents'] = $out['TOTAL']['MonthEvents'] + $monitor->Event_Summary->MonthEvents;
+                $out['TOTAL']['MonthEventDiskSpace'] = $out['TOTAL']['MonthEventDiskSpace'] +  $monitor->Event_Summary->MonthEventDiskSpace;
                 $out['MONITORS'][] = convertStdClassToArray($monitor->Monitor);
             }
+            $out['TOTAL']['bandwidth'] = sprintf("%03.2f ".LANG_ZONEMINDER_BANDWIDTH_KBS, $out['TOTAL']['bandwidth']);
+            $out['TOTAL']['HourEventDiskSpace'] = $this->formatBytes($out['TOTAL']['HourEventDiskSpace']);
+            $out['TOTAL']['DayEventDiskSpace'] = $this->formatBytes($out['TOTAL']['DayEventDiskSpace']);
+            $out['TOTAL']['WeekEventDiskSpace'] = $this->formatBytes($out['TOTAL']['WeekEventDiskSpace']);
+            $out['TOTAL']['MonthEventDiskSpace'] = $this->formatBytes($out['TOTAL']['MonthEventDiskSpace']);
         }
 
         if ($this->view_mode == 'events') {
-            $events = $this->fetchEvents($this->monitor, $this->mode);
+            $events = $this->fetchEvents($this->monitor, $this->mode, $this->page);
             foreach ($events->events as $event) {
                 $event->Event->monitorname = $this->monitorname;
                 $event->Event->DiskSpace = $this->formatBytes($event->Event->DiskSpace);
                 $event->Event->Length = $this->secondsToHMS((int)$event->Event->Length);
                 $out['EVENTS'][] = convertStdClassToArray($event->Event);
             }
-            if ($events->pagination->pageCount > 1) $out['PAGES'] = convertStdClassToArray($events->pagination);
-            echo "<pre>".print_r($out['PAGES'], true)."</pre>";
+            if ($events->pagination->pageCount > 1) {
+                require(DIR_MODULES.$this->name.'/Paginator.php');
+                $page=gr('page','int');
+                if (!$page) $page=1;
+                $urlPattern='?view_mode=events&monitor='.$this->monitor.'&mode='.$this->mode.'&monitorname='.$this->monitorname.'&page=(:num)';
+                $paginator = new JasonGrimes\Paginator($events->pagination->count, $events->pagination->limit, $page, $urlPattern);
+                $paginator->setNextText(LANG_ZONEMINDER_PAGE_NEXT);
+                $paginator->setPreviousText(LANG_ZONEMINDER_PAGE_PREV);
+                $out['Paginator'] = $paginator->toHtml();
+            }
         }
 
         if ($this->view_mode == 'event') {

@@ -25,6 +25,9 @@ $dictionary=array(
     'ZONEMINDER_COLUMN_DURATION'=>'Duration',
     'ZONEMINDER_COLUMN_DISK_SPACE'=>'Disk Space',
     'ZONEMINDER_COLUMN_THUMBNAIL'=>'Thumbnail',
+    'ZONEMINDER_PAGE_PREV'=>'Prev',
+    'ZONEMINDER_PAGE_NEXT'=>'Next',
+    'ZONEMINDER_NO_EVENTS_TEXT'=>'No events found',
 );
 
 foreach ($dictionary as $k=>$v) {
