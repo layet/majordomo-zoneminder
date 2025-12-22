@@ -28,6 +28,10 @@ $dictionary=array(
     'ZONEMINDER_PAGE_PREV'=>'Prev',
     'ZONEMINDER_PAGE_NEXT'=>'Next',
     'ZONEMINDER_NO_EVENTS_TEXT'=>'No events found',
+    'ZONEMINDER_TOTAL'=>'Total',
+    'ZONEMINDER_SETTINGS_SERVER_ADDRESS'=>'Server',
+    'ZONEMINDER_SETTINGS_USERNAME'=>'Username',
+    'ZONEMINDER_SETTINGS_PASSWORD'=>'Password',
 );
 
 foreach ($dictionary as $k=>$v) {
