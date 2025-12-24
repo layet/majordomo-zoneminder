@@ -19,6 +19,7 @@
         <div class="panel-body collapse" id="zoneminder_setup">
             <div style="width:98%">
                 <p>The Zoneminder API is enabled by default. To check, you can go to <em>Options->System</em> to check the checkbox <strong>OPT_USE_API</strong>.</p>
+                <p><b style="color: red;">Attention!</b> Zoneminder v1.36.36 has a bug that prevents retrieving the event list. An earlier version or update to v1.36.37 is required.</p>
             </div>
         </div>
     </div>
@@ -39,17 +40,38 @@
         </div>
         <div class="panel-body collapse" id="module_usual">
             <div style="width:98%">
-                <p>To embed a module, use a link of the following type: <code>&#91;&#35;module name="zoneminder" monitor="1" interval="2000"&#35;&#93;</code>.</p>
+                <p>To embed a module, use a link of the following type: <code>&#91;&#35;module name="zoneminder" monitor="1" interval="2000" showeventlist="1" scale="100"&#35;&#93;</code>.</p>
                 <p>Available options:</p>
                 <table class="table table-hover" align="left" style="margin-bottom: 5px;">
+                    <thead>
                     <tr>
-                        <td><code>monitor</code></td>
-                        <td>Monitor Id</td>
+                        <th>Parameter</th>
+                        <th>Description</th>
+                        <th>Default</th>
                     </tr>
-                    <tr>
-                        <td><code>interval</code></td>
-                        <td>Refresh interval in ms</td>
-                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>monitor</code></td>
+                            <td>Monitor Id</td>
+                            <td>required</td>
+                        </tr>
+                        <tr>
+                            <td><code>interval</code></td>
+                            <td>Refresh interval in ms</td>
+                            <td>1000</td>
+                        </tr>
+                        <tr>
+                            <td><code>showeventlist</code></td>
+                            <td>Show latest events list</td>
+                            <td>no</td>
+                        </tr>
+                        <tr>
+                            <td><code>scale</code></td>
+                            <td>Image quality (0-100%)</td>
+                            <td>100</td>
+                        </tr>
+                    </tbody>
                 </table>
                 <img src="/templates/zoneminder/help/menu_view.png" />
             </div>

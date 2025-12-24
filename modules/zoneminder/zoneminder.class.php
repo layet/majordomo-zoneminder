@@ -86,6 +86,8 @@ class zoneminder extends module {
         global $eventid;
         global $page;
         global $interval;
+        global $showeventlist;
+        global $scale;
         if (isset($id)) {
             $this->id=$id;
         }
@@ -109,6 +111,12 @@ class zoneminder extends module {
         }
         if (isset($interval)) {
             $this->interval=$interval;
+        }
+        if (isset($showeventlist)) {
+            $this->showeventlist=$showeventlist;
+        }
+        if (isset($scale)) {
+            $this->scale=$scale;
         }
     }
     /**
@@ -151,7 +159,16 @@ class zoneminder extends module {
         $monitor = $this->fetchMonitor($this->monitor);
         $out["monitor"] = $this->monitor;
         $out["name"] = $monitor->Monitor->Name;
+        if (isset($this->scale)) $out["scale"] = $this->scale; else $out["scale"] = 100;
         if (isset($this->interval)) $out["interval"] = $this->interval; else $out["interval"] = 1000;
+        if (isset($this->showeventlist)) {
+            $events = $this->fetchEvents($this->monitor, 'day', 1);
+            foreach ($events->events as $event) {
+                $event->Event->Length = $this->secondsToHMS((int)$event->Event->Length);
+                $out['EVENTS'][] = convertStdClassToArray($event->Event);
+            }
+        }
+        //$out["DEBUG"] = print_r($out['EVENTS'], true);
     }
 
     /**
@@ -391,7 +408,7 @@ class zoneminder extends module {
                 default: $dateRange = '-1 hour';
             }
 
-            $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/events/index/MonitorId:'.$monitorId.'/StartDateTime>=:'.date("Y-m-d H:i:s", strtotime($dateRange)).'/EndDateTime<=:'.date("Y-m-d H:i:s").'.json?page='.$page;
+            $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/events/index/MonitorId:'.$monitorId.'/StartDateTime>=:'.date("Y-m-d H:i:s", strtotime($dateRange)).'/EndDateTime<=:'.date("Y-m-d H:i:s").'.json?sort=StartDateTime&direction=desc&page='.$page;
             $url_path = str_replace(' ', '%20', $url_path);
             $results = file_get_contents($url_path, false);
             return json_decode($results);

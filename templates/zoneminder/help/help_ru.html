@@ -19,6 +19,7 @@
         <div class="panel-body collapse" id="zoneminder_setup">
             <div style="width:98%">
                 <p>API Zoneminder включено по-умолчанию. Для проверки можно зайти в <em>Options->System</em> и проверить чекбокс <strong>OPT_USE_API</strong>.</p>
+                <p><b style="color: red;">Внимание!</b> В Zoneminder v1.36.36 присутствует ошибка не позволяющая получить список событий. Необходима более ранняя версия или обновление до v1.36.37.</p>
             </div>
         </div>
     </div>
@@ -39,17 +40,38 @@
         </div>
         <div class="panel-body collapse" id="module_usual">
             <div style="width:98%">
-                <p>Для встраивания модуля используется ссылка вида <code>&#91;&#35;module name="zoneminder" monitor="1" interval="2000"&#35;&#93;</code>.</p>
+                <p>Для встраивания модуля используется ссылка вида <code>&#91;&#35;module name="zoneminder" monitor="1" interval="2000" showeventlist="1" scale="100"&#35;&#93;</code>.</p>
                 <p>Доступные параметры:</p>
                 <table class="table table-hover" align="left" style="margin-bottom: 5px;">
-                    <tr>
-                        <td><code>monitor</code></td>
-                        <td>№ камеры</td>
-                    </tr>
-                    <tr>
-                        <td><code>interval</code></td>
-                        <td>Интервал обновления в мс</td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Параметр</th>
+                            <th>Описание</th>
+                            <th>Значение по-умолчанию</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>monitor</code></td>
+                            <td>№ камеры</td>
+                            <td>обязателен</td>
+                        </tr>
+                        <tr>
+                            <td><code>interval</code></td>
+                            <td>Интервал обновления в мс</td>
+                            <td>1000</td>
+                        </tr>
+                        <tr>
+                            <td><code>showeventlist</code></td>
+                            <td>Показать список последних событий
+                            <td>нет</td>
+                        </tr>
+                        <tr>
+                            <td><code>scale</code></td>
+                            <td>Качество изображения (0-100%)</td>
+                            <td>100</td>
+                        </tr>
+                    </tbody>
                 </table>
                 <img src="/templates/zoneminder/help/menu_view.png" />
             </div>
