@@ -39,7 +39,7 @@ $dictionary=array(
     'ZONEMINDER_HELP'=>'Справка',
     'ZONEMINDER_CLOSE'=>'Закрыть',
     'ZONEMINDER_ABOUT_TEXT'=>'Модуль поддержки системы видеонаблюдения <b>Zoneminder</b>.<br><br>
-               Обсуждение модуля на <a href="https://mjdm.ru/forum/viewtopic.php" target="_blank">форуме</a>.<br>
+               Обсуждение модуля на <a href="https://mjdm.ru/forum/viewtopic.php?t=8255" target="_blank">форуме</a>.<br>
                Проект в <a href="https://github.com/layet/majordomo-zoneminder" target="_blank">Github</a>.<br>
                Проект в <a href="https://connect.smartliving.ru/tasks/922.html" target="_blank">Connect</a>.<br>',
 );

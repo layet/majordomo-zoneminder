@@ -39,7 +39,7 @@ $dictionary=array(
     'ZONEMINDER_HELP'=>'Help',
     'ZONEMINDER_CLOSE'=>'Close',
     'ZONEMINDER_ABOUT_TEXT'=>'Video surveillance system support module <b>Zoneminder</b>.<br><br>
-               Discussion of the module on the <a href="https://mjdm.ru/forum/viewtopic.php" target="_blank">forum</a>.<br>
+               Discussion of the module on the <a href="https://mjdm.ru/forum/viewtopic.php?t=8255" target="_blank">forum</a>.<br>
                Project on <a href="https://github.com/layet/majordomo-zoneminder" target="_blank">Github</a>.<br>
                Project on <a href="https://connect.smartliving.ru/tasks/922.html" target="_blank">Connect</a>.<br>',
 );
