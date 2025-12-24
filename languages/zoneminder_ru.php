@@ -33,7 +33,11 @@ $dictionary=array(
     'ZONEMINDER_SETTINGS_SERVER_ADDRESS'=>'Адрес сервера',
     'ZONEMINDER_SETTINGS_USERNAME'=>'Пользователь',
     'ZONEMINDER_SETTINGS_PASSWORD'=>'Пароль',
+    'ZONEMINDER_SETTINGS_TEXT'=>'Настройки',
 
+    'ZONEMINDER_ABOUT'=>'О модуле',
+    'ZONEMINDER_HELP'=>'Справка',
+    'ZONEMINDER_CLOSE'=>'Закрыть',
     'ZONEMINDER_ABOUT_TEXT'=>'Модуль поддержки системы видеонаблюдения <b>Zoneminder</b>.<br><br>
                Обсуждение модуля на <a href="https://mjdm.ru/forum/viewtopic.php" target="_blank">форуме</a>.<br>
                Проект в <a href="https://github.com/layet/majordomo-zoneminder" target="_blank">Github</a>.<br>
