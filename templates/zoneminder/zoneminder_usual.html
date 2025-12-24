@@ -17,7 +17,7 @@
 </style>
 <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
     <h3>[#name#]</h3>
-    <div><img id="videoStream" src="/camera.php?id=[#monitor#]&scale=100" data-src="/camera.php?id=[#monitor#]&scale=100" style="width: 100%;"></div>
+    <div style="width: 100%;"><img id="videoStream" src="/camera.php?id=[#monitor#]&scale=[#scale#]" data-src="/camera.php?id=[#monitor#]&scale=[#scale#]" style="width: 100%;"></div>
     <div style="display: flex; flex-direction: row; gap: 8px;">
         <div class="zm-button zm-enabled" onclick="zm_play(this);">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.000000" height="24.000000" fill="none">

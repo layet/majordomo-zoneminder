@@ -87,6 +87,7 @@ class zoneminder extends module {
         global $page;
         global $interval;
         global $showeventlist;
+        global $scale;
         if (isset($id)) {
             $this->id=$id;
         }
@@ -113,6 +114,9 @@ class zoneminder extends module {
         }
         if (isset($showeventlist)) {
             $this->showeventlist=$showeventlist;
+        }
+        if (isset($scale)) {
+            $this->scale=$scale;
         }
     }
     /**
@@ -155,10 +159,12 @@ class zoneminder extends module {
         $monitor = $this->fetchMonitor($this->monitor);
         $out["monitor"] = $this->monitor;
         $out["name"] = $monitor->Monitor->Name;
+        if (isset($this->scale)) $out["scale"] = $this->scale; else $out["scale"] = 100;
         if (isset($this->interval)) $out["interval"] = $this->interval; else $out["interval"] = 1000;
         if (isset($this->showeventlist)) {
             $events = $this->fetchEvents($this->monitor, 'day', 1);
             foreach ($events->events as $event) {
+                $event->Event->Length = $this->secondsToHMS((int)$event->Event->Length);
                 $out['EVENTS'][] = convertStdClassToArray($event->Event);
             }
         }
