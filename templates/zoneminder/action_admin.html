@@ -3,14 +3,14 @@
     <img src="../img/modules/zoneminder.png"  width="30" height="30">
     &nbsp;&nbsp;&nbsp;
     <!--# Кнопка 'Настройки'. #-->
-    <a class="btn btn-default" href="#api_settings" data-toggle="collapse"><i class="glyphicon glyphicon-cog"></i> Настройки</a>
+    <a class="btn btn-default" href="#api_settings" data-toggle="collapse"><i class="glyphicon glyphicon-cog"></i> <#LANG_ZONEMINDER_SETTINGS_TEXT#></a>
 
     <!--# Кнопка 'О модуле'. #-->
     <div class="float-right">&nbsp;&nbsp;&nbsp;&nbsp;</div>
-    <button class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#about">О модуле&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span></button>
+    <button class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#about"><#LANG_ZONEMINDER_ABOUT#>&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span></button>
     <!--# Кнопка 'Справка'. #-->
     <div class="float-right">&nbsp;&nbsp;&nbsp;</div>
-    <a href="?view_mode=test" class="btn btn-default btn-sm float-right" title="Справка"><i class="glyphicon glyphicon-question-sign"></i></a>
+    <a href="?view_mode=help" class="btn btn-default btn-sm float-right" title="<#LANG_ZONEMINDER_HELP#>"><i class="glyphicon glyphicon-question-sign"></i></a>
 </div>
 
 <!--# Выпадающее меню настроек. #-->
@@ -31,3 +31,14 @@
     [#inc zoneminder_event.html#]
 [#endif VIEW_MODE#]
 
+<!--# Страница справки #-->
+[#if VIEW_MODE="help"#]
+    [#if lang="ru"#]
+        [#inc help/help_ru.html#]
+    [#endif lang#]
+    [#if lang="en"#]
+        [#inc help/help_en.html#]
+    [#endif lang#]
+[#endif VIEW_MODE#]
+
+[#inc about.html#]

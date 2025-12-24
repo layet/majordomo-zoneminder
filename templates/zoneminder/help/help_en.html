@@ -1,0 +1,62 @@
+<h4>Help</h4>
+<div class="panel-group" id="accordion" style="width:98%">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#general_help">General information</a>
+        </div>
+        <div class="panel-body collapse" id="general_help">
+            <div style="width:98%">
+                <p>The <strong>Zoneminder</strong> module is designed to support the <a href="https://zoneminder.com/">Zoneminder</a> video surveillance system using an API.</p>
+                <p>The module displays a list of cameras, their functions, and also lists events by hour, day, week, and month. Video viewing of events is available.</p>
+                <p>The module can be integrated into menus and scenes.</p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#zoneminder_setup">Zoneminder setup</a>
+        </div>
+        <div class="panel-body collapse" id="zoneminder_setup">
+            <div style="width:98%">
+                <p>The Zoneminder API is enabled by default. To check, you can go to <em>Options->System</em> to check the checkbox <strong>OPT_USE_API</strong>.</p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#module_setup">Module setup</a>
+        </div>
+        <div class="panel-body collapse" id="module_setup">
+            <div style="width:98%">
+                <p>To configure the module, you must specify the server address in the settings panel.</p>
+                <img src="/templates/zoneminder/help/module_setup.png" />
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#module_usual">Embedding into the menu</a>
+        </div>
+        <div class="panel-body collapse" id="module_usual">
+            <div style="width:98%">
+                <p>To embed a module, use a link of the following type: <code>&#91;&#35;module name="zoneminder" monitor="1" interval="2000"&#35;&#93;</code>.</p>
+                <p>Available options:</p>
+                <table class="table table-hover" align="left" style="margin-bottom: 5px;">
+                    <tr>
+                        <td><code>monitor</code></td>
+                        <td>Monitor Id</td>
+                    </tr>
+                    <tr>
+                        <td><code>interval</code></td>
+                        <td>Refresh interval in ms</td>
+                    </tr>
+                </table>
+                <img src="/templates/zoneminder/help/menu_view.png" />
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div>
+    <a href="?data_source=<#DATA_SOURCE#>" class="btn btn-default"><#LANG_STRING_BACK#></a>
+</div>

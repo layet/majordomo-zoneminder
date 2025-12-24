@@ -1,0 +1,62 @@
+<h4>Справка</h4>
+<div class="panel-group" id="accordion" style="width:98%">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#general_help">Общие сведения</a>
+        </div>
+        <div class="panel-body collapse" id="general_help">
+            <div style="width:98%">
+                <p>Модуль <strong>Zoneminder</strong> предназначен для поддержки системы видеонаблюдения <a href="https://zoneminder.com/">Zoneminder</a> с использованием API.</p>
+                <p>Модуль позволяет выводить список камер, режимы их работы, а также списки событий за час/день/неделю и месяц. Доступен просмотр видео события.</p>
+                <p>Модуль позволяет встраивать его в меню и сцены.</p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#zoneminder_setup">Настройка Zoneminder</a>
+        </div>
+        <div class="panel-body collapse" id="zoneminder_setup">
+            <div style="width:98%">
+                <p>API Zoneminder включено по-умолчанию. Для проверки можно зайти в <em>Options->System</em> и проверить чекбокс <strong>OPT_USE_API</strong>.</p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#module_setup">Настройка модуля</a>
+        </div>
+        <div class="panel-body collapse" id="module_setup">
+            <div style="width:98%">
+                <p>Для настройки модуля необходимо указать адрес сервера в панели настроек.</p>
+                <img src="/templates/zoneminder/help/module_setup.png" />
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#module_usual">Встраивание в меню</a>
+        </div>
+        <div class="panel-body collapse" id="module_usual">
+            <div style="width:98%">
+                <p>Для встраивания модуля используется ссылка вида <code>&#91;&#35;module name="zoneminder" monitor="1" interval="2000"&#35;&#93;</code>.</p>
+                <p>Доступные параметры:</p>
+                <table class="table table-hover" align="left" style="margin-bottom: 5px;">
+                    <tr>
+                        <td><code>monitor</code></td>
+                        <td>№ камеры</td>
+                    </tr>
+                    <tr>
+                        <td><code>interval</code></td>
+                        <td>Интервал обновления в мс</td>
+                    </tr>
+                </table>
+                <img src="/templates/zoneminder/help/menu_view.png" />
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div>
+    <a href="?data_source=<#DATA_SOURCE#>" class="btn btn-default"><#LANG_STRING_BACK#></a>
+</div>

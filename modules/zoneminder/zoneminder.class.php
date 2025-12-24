@@ -251,6 +251,10 @@ class zoneminder extends module {
             $out['EVENT'] = convertStdClassToArray($this->fetchEvent($this->eventid));
         }
 
+        if ($this->view_mode == 'help') {
+            $out['lang'] = SETTINGS_SITE_LANGUAGE;
+        }
+
         if ($this->view_mode == 'test') {
             $this->test();
             //$this->redirect('?');
@@ -292,8 +296,7 @@ class zoneminder extends module {
      */
     function test()
     {
-        $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/events/index/MonitorId:5/StartDateTime >=:'.date("Y-m-d H:i:s", strtotime("-1 hour")).'/EndDateTime <=:'.date("Y-m-d H:i:s").'.json';
-        echo "<pre>".print_r($url_path, true)."</pre>";
+        echo "<pre>".print_r(SETTINGS_SITE_LANGUAGE, true)."</pre>";
     }
 
     /**
