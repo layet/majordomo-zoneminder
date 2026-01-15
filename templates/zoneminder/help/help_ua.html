@@ -1,0 +1,84 @@
+<h4>Справка</h4>
+<div class="panel-group" id="accordion" style="width:98%">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#general_help">Загальні відомості</a>
+        </div>
+        <div class="panel-body collapse" id="general_help">
+            <div style="width:98%">
+                <p>Модуль <strong>Zoneminder</strong> призначений для підтримки системи відеоспостереження <a href="https://zoneminder.com/">Zoneminder</a> з використанням API.</p>
+                <p>Модуль дозволяє виводити список камер, режими їх роботи, а також списки подій за годину/день/тиждень та місяць. Перегляд відео події доступний.</p>
+                <p>Модуль дозволяє вбудовувати його в меню та сцени.</p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#zoneminder_setup">Налаштування Zoneminder</a>
+        </div>
+        <div class="panel-body collapse" id="zoneminder_setup">
+            <div style="width:98%">
+                <p>API Zoneminder увімкнено за замовчуванням. Для перевірки можна зайти в <em>Options->System</em> та перевірити чекбокс <strong>OPT_USE_API</strong>.</p>
+                <p><b style="color: red;">Увага!</b> В Zoneminder v1.36.36 присутня помилка, що не дозволяє отримати список подій. Потрібна рання версія або оновлення до v1.36.37.</p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#module_setup">Налаштування модуля</a>
+        </div>
+        <div class="panel-body collapse" id="module_setup">
+            <div style="width:98%">
+                <p>Для налаштування модуля необхідно вказати адресу сервера на панелі опцій.</p>
+                <img src="/templates/zoneminder/help/module_setup.png" />
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#accordion" href="#module_usual">Вбудовування у меню</a>
+        </div>
+        <div class="panel-body collapse" id="module_usual">
+            <div style="width:98%">
+                <p>Для вбудовування модуля використовується посилання виду <code>&#91;&#35;module name="zoneminder" monitor="1" interval="2000" showeventlist="1" scale="100"&#35;&#93;</code>.</p>
+                <p>Доступні параметри:</p>
+                <table class="table table-hover" align="left" style="margin-bottom: 5px;">
+                    <thead>
+                        <tr>
+                            <th>Параметр</th>
+                            <th>Опис</th>
+                            <th>Значення за замовчуванням</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>monitor</code></td>
+                            <td>№ камеры</td>
+                            <td>обов'язковий</td>
+                        </tr>
+                        <tr>
+                            <td><code>interval</code></td>
+                            <td>Інтервал оновлення у мс</td>
+                            <td>1000</td>
+                        </tr>
+                        <tr>
+                            <td><code>showeventlist</code></td>
+                            <td>Показати список останніх подій</td>
+                            <td>нет</td>
+                        </tr>
+                        <tr>
+                            <td><code>scale</code></td>
+                            <td>Якість зображення (0-100%)</td>
+                            <td>100</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <img src="/templates/zoneminder/help/menu_view.png" />
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div>
+    <a href="?data_source=<#DATA_SOURCE#>" class="btn btn-default"><#LANG_STRING_BACK#></a>
+</div>

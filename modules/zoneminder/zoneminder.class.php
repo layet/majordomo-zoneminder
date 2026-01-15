@@ -376,7 +376,7 @@ class zoneminder extends module {
         $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/monitors.json';
 
         $results = file_get_contents($url_path, false);
-        return json_decode($results)->monitors;
+        if (!$results) return []; else return json_decode($results)->monitors;
     }
 
     /**
