@@ -388,7 +388,7 @@ class zoneminder extends module {
             $monitors = json_decode($results)->monitors;
             foreach ($monitors as $monitor) {
                 $exists = SQLSelectOne('select 1 from `zoneminder` where `ID`='.$monitor->Monitor->Id);
-                if($exists) SQLExec('update `zoneminder` set `MONITOR_NAME`='.$monitor->Monitor->Name.' where `ID`='.$monitor->Monitor->Id);
+                if($exists) SQLExec('update `zoneminder` set `MONITOR_NAME`="'.$monitor->Monitor->Name.'" where `ID`='.$monitor->Monitor->Id);
                     else SQLExec('insert into `zoneminder` (`ID`, `MONITOR_NAME`) values ('.$monitor->Monitor->Id.', "'.$monitor->Monitor->Name.'")');
                 //SQLExec('insert into `zoneminder` (`ID`, `MONITOR_NAME`) values ('.$monitor->Monitor->Id.', "'.$monitor->Monitor->Name.'") on duplicate key update set `MONITOR_NAME`="'.$monitor->Monitor->Name.'"');
 
