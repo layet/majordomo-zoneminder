@@ -488,8 +488,6 @@ class zoneminder extends module {
    zoneminder: MONITOR_NAME_OVERRIDE varchar(4000) NULL
 EOD;
         parent::dbInstall($data);
-        //SQLExec("ALTER TABLE `zoneminder` ADD PRIMARY KEY (`ID`);
-;");
     }
 // --------------------------------------------------------------------
 }
