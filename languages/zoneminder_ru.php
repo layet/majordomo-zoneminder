@@ -41,7 +41,8 @@ $dictionary=array(
     'ZONEMINDER_ABOUT_TEXT'=>'Модуль поддержки системы видеонаблюдения <b>Zoneminder</b>.<br><br>
                Обсуждение модуля на <a href="https://mjdm.ru/forum/viewtopic.php?t=8255" target="_blank">форуме</a>.<br>
                Проект в <a href="https://github.com/layet/majordomo-zoneminder" target="_blank">Github</a>.<br>
-               Проект в <a href="https://connect.smartliving.ru/tasks/923.html" target="_blank">Connect</a>.<br>',
+               Проект в <a href="https://connect.smartliving.ru/tasks/923.html" target="_blank">Connect</a>.<br>
+               Канал в <a href="https://t.me/mjdm_zoneminder" target="_blank">Telegram</a>.<br>',
 );
 
 foreach ($dictionary as $k=>$v) {
