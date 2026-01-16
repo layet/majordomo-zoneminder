@@ -1,3 +1,10 @@
+<script type="text/javascript">
+  function fillUpdateForm(id, name) {
+    $("#editMonitorForm > div > div > input[name='monitorname']").val(name);
+    $("#editMonitorForm > div > div > input[name='monitor']").val(id);
+  }
+</script>
+
 <table align=center class="table table-hover table-condensed table-responsive" style="margin-top: 1em;">
   <thead>
   <tr>
@@ -23,6 +30,7 @@
         <div style="display: flex; flex-direction: row; align-items: center; gap: 16px;">
           <div style="width: 14px; height: 14px; border-radius: 7px; background: [#monitor_color#];"></div>
           <span style="font-weight: 600;">[#Name#]</span>
+          <div data-toggle="modal" data-target="#editMonitor" style="cursor: pointer;" onclick="fillUpdateForm([#Id#], '[#Name#]');"><i class="glyphicon glyphicon-edit"></i></div>
         </div>
       </div>
     </td>
@@ -95,3 +103,23 @@
   </tr>
   </tbody>
 </table>
+
+<div class="modal fade" id="editMonitor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editMonitorForm" method="post" action="?">
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" class="form-control" name="monitorname" value="" />
+            <input type="hidden" name="monitor" value="" />
+            <input type="hidden" name="view_mode" value="update_monitor_name" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary"><#LANG_UPDATE#></button>
+          <button type="button" class="btn btn-default" data-dismiss="modal"><#LANG_ZONEMINDER_CLOSE#></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

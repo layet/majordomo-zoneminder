@@ -272,6 +272,13 @@ class zoneminder extends module {
             $out['lang'] = SETTINGS_SITE_LANGUAGE;
         }
 
+        if ($this->view_mode == 'update_monitor_name') {
+            $dbitem['ID'] = DBSafe($this->monitor);
+            $dbitem['MONITOR_NAME_OVERRIDE'] = DBSafe($this->monitorname);
+            SQLUpdate('zoneminder', $dbitem);
+            $this->redirect('?');
+        }
+
         if ($this->view_mode == 'test') {
             $this->test();
             //$this->redirect('?');
@@ -313,7 +320,7 @@ class zoneminder extends module {
      */
     function test()
     {
-        echo "<pre>".print_r(SETTINGS_SITE_LANGUAGE, true)."</pre>";
+        echo "<pre>".print_r(SQLSelectOne('select `MONITOR_NAME_OVERRIDE` from `zoneminder` where `ID`=2 and `MONITOR_NAME_OVERRIDE` is not null'), true)."</pre>";
     }
 
     /**
@@ -376,7 +383,16 @@ class zoneminder extends module {
         $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/monitors.json';
 
         $results = file_get_contents($url_path, false);
-        if (!$results) return []; else return json_decode($results)->monitors;
+        if (!$results) return []; else
+        {
+            $monitors = json_decode($results)->monitors;
+            foreach ($monitors as $monitor) {
+                SQLExec('insert into `zoneminder` (`ID`, `MONITOR_NAME`) values ('.$monitor->Monitor->Id.', "'.$monitor->Monitor->Name.'") on duplicate key update set `MONITOR_NAME`="'.$monitor->Monitor->Name.'"');
+                $name_override = SQLSelectOne('select `MONITOR_NAME_OVERRIDE` from `zoneminder` where `ID`='.$monitor->Monitor->Id.' and `MONITOR_NAME_OVERRIDE` is not null');
+                if ($name_override) $monitor->Monitor->Name = $name_override['MONITOR_NAME_OVERRIDE'];
+            }
+            return $monitors;
+        }
     }
 
     /**
@@ -389,7 +405,10 @@ class zoneminder extends module {
         $url_path = $this->config['SERVER_PROTO'].'://'.$this->config['SERVER_ADDRESS'].'/zm/api/monitors/'.$id.'.json';
         $results = file_get_contents($url_path, false);
 
-        return json_decode($results)->monitor;
+        $monitor = json_decode($results)->monitor;
+        $name_override = SQLSelectOne('select `MONITOR_NAME_OVERRIDE` from `zoneminder` where `ID`='.$monitor->Monitor->Id.' and `MONITOR_NAME_OVERRIDE` is not null');
+        if ($name_override) $monitor->Monitor->Name = $name_override['MONITOR_NAME_OVERRIDE'];
+        return $monitor;
     }
 
     /**
@@ -438,10 +457,35 @@ class zoneminder extends module {
     function install($data='') {
         parent::install();
     }
+
+    /**
+     * Uninstall
+     *
+     * Module uninstall routine
+     *
+     * @access public
+     */
+    function uninstall() {
+        SQLExec('DROP TABLE IF EXISTS zoneminder');
+        parent::uninstall();
+    }
+
+    /**
+     * dbInstall
+     *
+     * Database installation routine
+     *
+     * @access private
+     */
+    function dbInstall($data) {
+        $data = <<<EOD
+   zoneminder: ID int NOT NULL
+   zoneminder: MONITOR_NAME varchar(4000) NOT NULL
+   zoneminder: MONITOR_NAME_OVERRIDE varchar(4000) NULL
+EOD;
+        parent::dbInstall($data);
+        SQLExec("ALTER TABLE `zoneminder` ADD PRIMARY KEY (`ID`);
+;");
+    }
 // --------------------------------------------------------------------
 }
-/*
-*
-* TW9kdWxlIGNyZWF0ZWQgSnVsIDE4LCAyMDIzIHVzaW5nIFNlcmdlIEouIHdpemFyZCAoQWN0aXZlVW5pdCBJbmMgd3d3LmFjdGl2ZXVuaXQuY29tKQ==
-*
-*/
