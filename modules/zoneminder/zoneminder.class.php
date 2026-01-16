@@ -483,12 +483,12 @@ class zoneminder extends module {
      */
     function dbInstall($data) {
         $data = <<<EOD
-   zoneminder: ID int NOT NULL
+   zoneminder: ID int NOT NULL PRIMARY KEY
    zoneminder: MONITOR_NAME varchar(4000) NOT NULL
    zoneminder: MONITOR_NAME_OVERRIDE varchar(4000) NULL
 EOD;
         parent::dbInstall($data);
-        SQLExec("ALTER TABLE `zoneminder` ADD PRIMARY KEY (`ID`);
+        //SQLExec("ALTER TABLE `zoneminder` ADD PRIMARY KEY (`ID`);
 ;");
     }
 // --------------------------------------------------------------------
