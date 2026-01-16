@@ -40,6 +40,11 @@
     [#inc zoneminder_event.html#]
 [#endif VIEW_MODE#]
 
+<!--# Страница просмотра камеры в админке #-->
+[#if VIEW_MODE="monitor"#]
+    [#inc zoneminder_monitor.html#]
+[#endif VIEW_MODE#]
+
 <!--# Страница справки #-->
 [#if VIEW_MODE="help"#]
     [#if lang="ru"#]

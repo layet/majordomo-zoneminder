@@ -279,6 +279,19 @@ class zoneminder extends module {
             $this->redirect('?');
         }
 
+        if ($this->view_mode == 'monitor') {
+            $monitor = $this->fetchMonitor($this->monitor);
+            $out["monitor"] = $this->monitor;
+            $out["name"] = $monitor->Monitor->Name;
+            $out["scale"] = 100;
+            $out["interval"] = 1000;
+            $events = $this->fetchEvents($this->monitor, 'day', 1);
+            foreach ($events->events as $event) {
+                $event->Event->Length = $this->secondsToHMS((int)$event->Event->Length);
+                $out['EVENTS'][] = convertStdClassToArray($event->Event);
+            }
+        }
+
         if ($this->view_mode == 'test') {
             $this->test();
             //$this->redirect('?');
