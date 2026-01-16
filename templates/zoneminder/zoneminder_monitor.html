@@ -1,0 +1,135 @@
+<style>
+    .zm-button {
+        width: 36px;
+        height: 36px;
+        border: 1px solid rgba(205, 209, 220, 0.1);
+        border-radius: 10px;
+        background: rgba(205, 209, 220, 0.16);
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .zm-button.zm-enabled {
+        background: rgba(205, 209, 220, 0.86);
+    }
+
+    .zm-bold {
+        font-weight: bold;
+    }
+
+    div[style="display: grid;"] {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        row-gap: 8px;
+    }
+
+    @media (max-width: 600px) {
+        div[style="display: grid;"] {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
+
+    .zm-grid-element {
+        border-bottom: 1px solid #CCCCCC;
+        padding-bottom: 4px;
+    }
+
+    .eventViewer {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0px;
+        top: 0px;
+        z-index: 10;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+</style>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%;">
+    <h3>[#name#]</h3>
+    <div style="width: 100%;"><img id="videoStream" src="/camera.php?id=[#monitor#]&scale=[#scale#]" data-src="/camera.php?id=[#monitor#]&scale=[#scale#]" style="width: 100%;"></div>
+    <div style="display: flex; flex-direction: row; gap: 8px;">
+        <div class="zm-button zm-enabled" onclick="zm_play(this);">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.000000" height="24.000000" fill="none">
+                <rect id="play" width="24.000000" height="24.000000" x="0.000000" y="0.000000" />
+                <path id="Icon" d="M7 17.9383C7 19.5977 8.90418 20.5353 10.2194 19.5236L17.9392 13.5853C18.9799 12.7847 18.9799 11.2154 17.9392 10.4148L10.2194 4.47654C8.90418 3.46482 7 4.40244 7 6.06179L7 17.9383Z" fill-rule="nonzero" stroke="rgb(66,66,66)" stroke-linecap="round" stroke-width="2" />
+            </svg>
+        </div>
+        <div class="zm-button" onclick="zm_pause(this);">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.000000" height="24.000000" fill="none">
+                <rect id="pause " width="24.000000" height="24.000000" x="0.000000" y="0.000000" />
+                <path id="Icon" d="M10 18C10 19.1046 9.10457 20 8 20C6.89543 20 6 19.1046 6 18L6 6C6 4.89543 6.89543 4 8 4C9.10457 4 10 4.89543 10 6L10 18ZM18 18C18 19.1046 17.1046 20 16 20C14.8954 20 14 19.1046 14 18L14 6C14 4.89543 14.8954 4 16 4C17.1046 4 18 4.89543 18 6L18 18Z" fill-rule="evenodd" stroke="rgb(66,66,66)" stroke-width="2" />
+            </svg>
+        </div>
+    </div>
+    [#if EVENTS#]
+    <div style="display: grid;">
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_ID#></div>
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_NAME#></div>
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_START_TIME#></div>
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_END_TIME#></div>
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_ID#></div>
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_DURATION#></div>
+        [#begin EVENTS#]
+        <div class="zm-grid-element">[#Id#]</div>
+        <div class="zm-grid-element"><a href="#" onclick="zm_playEvent([#Id#], [#Videoed#])">[#Name#]</a></div>
+        <div class="zm-grid-element">[#StartDateTime#]</div>
+        <div class="zm-grid-element">[#EndDateTime#]</div>
+        <div class="zm-grid-element">[#Length#]</div>
+        <div class="zm-grid-element"><img src="/camera.php?source=thumbnail&eid=[#Id#]&width=96&height=54" width="96" height="54"></div>
+        [#end EVENTS#]
+    </div>
+    [#endif EVENTS#]
+    <!--<div><pre>[#DEBUG#]</pre></div>-->
+</div>
+<div class="eventViewer" style="display: none;">
+    <div onclick="$('.eventViewer').hide();">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.000000" height="24.000000" fill="none">
+            <rect id="close" width="24.000000" height="24.000000" x="0.000000" y="0.000000" />
+            <path id="Icon" d="M18.41 5.59002C19.1967 6.37672 19.1967 7.65221 18.41 8.4389L15.205 11.6439C15.0083 11.8406 15.0083 12.1594 15.205 12.3561L18.41 15.5611C19.1967 16.3478 19.1967 17.6233 18.41 18.41C17.6233 19.1967 16.3478 19.1967 15.5611 18.41L12.3561 15.205C12.1594 15.0083 11.8406 15.0083 11.6439 15.205L8.4389 18.41C7.6522 19.1967 6.37672 19.1967 5.59002 18.41C4.80333 17.6233 4.80333 16.3478 5.59002 15.5611L8.79501 12.3561C8.99169 12.1594 8.99169 11.8406 8.79501 11.6439L5.59002 8.4389C4.80333 7.6522 4.80333 6.37672 5.59002 5.59002C6.37672 4.80333 7.65221 4.80333 8.4389 5.59002L11.6439 8.79501C11.8406 8.99169 12.1594 8.99169 12.3561 8.79501L15.5611 5.59002C16.3478 4.80333 17.6233 4.80333 18.41 5.59002Z" fill-rule="nonzero" stroke="rgb(66,66,66)" stroke-width="2" />
+        </svg>
+    </div>
+    <div style="display: flex;">
+        <video id="eventVideo" style="width: 100%;" controls="controls" autoplay="" style="transform: matrix(1, 0, 0, 1, 0, 0);"
+               preload="auto" src="" data-src="/camera.php?source=mpeg&eid=">
+        </video>
+        <img id="eventMJPEG" src="" style="width: 100%;" data-src="/camera.php?source=mjpeg&eid=">
+    </div>
+</div>
+<script>
+    var isPaused = false;
+    var videoStreamTimer = setInterval(function () {
+        var $img = $('#videoStream');
+        if (!isPaused) $img.attr('src', $img.attr('data-src')+'&rand='+Math.random());
+    }, [#interval#]);
+
+    function zm_play(e) {
+        if (!isPaused) return;
+        $('.zm-button').removeClass('zm-enabled');
+        $(e).addClass('zm-enabled');
+        isPaused = false;
+    }
+
+    function zm_pause(e) {
+        if (isPaused) return;
+        $('.zm-button').removeClass('zm-enabled');
+        $(e).addClass('zm-enabled');
+        isPaused = true;
+    }
+
+    function zm_playEvent(id, videoed) {
+        $("#eventVideo").hide();
+        $("#eventMJPEG").hide();
+        if (videoed == 1) {
+            $("#eventVideo").attr("src", $("#eventVideo").attr("data-src") + id);
+            $("#eventVideo").show();
+        }  else {
+            $("#eventMJPEG").attr("src", $("#eventMJPEG").attr("data-src") + id);
+            $("#eventMJPEG").show();
+        }
+        $('.eventViewer').show();
+    }
+</script>
