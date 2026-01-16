@@ -21,10 +21,18 @@
 
     div[style="display: grid;"] {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-        align-items: center;
-        justify-items: center;
-        column-gap: 8px;
         row-gap: 8px;
+    }
+
+    @media (max-width: 600px) {
+        div[style="display: grid;"] {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
+
+    .zm-grid-element {
+        border-bottom: 1px solid #CCCCCC;
+        padding-bottom: 4px;
     }
 
     .eventViewer {
@@ -40,7 +48,7 @@
         align-items: flex-end;
     }
 </style>
-<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%;">
     <h3>[#name#]</h3>
     <div style="width: 100%;"><img id="videoStream" src="/camera.php?id=[#monitor#]&scale=[#scale#]" data-src="/camera.php?id=[#monitor#]&scale=[#scale#]" style="width: 100%;"></div>
     <div style="display: flex; flex-direction: row; gap: 8px;">
@@ -59,19 +67,19 @@
     </div>
     [#if EVENTS#]
     <div style="display: grid;">
-        <div class="zm-bold"><#LANG_ZONEMINDER_COLUMN_ID#></div>
-        <div class="zm-bold"><#LANG_ZONEMINDER_COLUMN_NAME#></div>
-        <div class="zm-bold"><#LANG_ZONEMINDER_COLUMN_START_TIME#></div>
-        <div class="zm-bold"><#LANG_ZONEMINDER_COLUMN_END_TIME#></div>
-        <div class="zm-bold"><#LANG_ZONEMINDER_COLUMN_ID#></div>
-        <div class="zm-bold"><#LANG_ZONEMINDER_COLUMN_DURATION#></div>
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_ID#></div>
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_NAME#></div>
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_START_TIME#></div>
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_END_TIME#></div>
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_ID#></div>
+        <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_DURATION#></div>
         [#begin EVENTS#]
-        <div>[#Id#]</div>
-        <div><a href="#" onclick="zm_playEvent([#Id#], [#Videoed#])">[#Name#]</a></div>
-        <div>[#StartDateTime#]</div>
-        <div>[#EndDateTime#]</div>
-        <div>[#Length#]</div>
-        <div><img src="/camera.php?source=thumbnail&eid=[#Id#]&width=96&height=54" width="96" height="54"></div>
+        <div class="zm-grid-element">[#Id#]</div>
+        <div class="zm-grid-element"><a href="#" onclick="zm_playEvent([#Id#], [#Videoed#])">[#Name#]</a></div>
+        <div class="zm-grid-element">[#StartDateTime#]</div>
+        <div class="zm-grid-element">[#EndDateTime#]</div>
+        <div class="zm-grid-element">[#Length#]</div>
+        <div class="zm-grid-element"><img src="/camera.php?source=thumbnail&eid=[#Id#]&width=96&height=54" width="96" height="54"></div>
         [#end EVENTS#]
     </div>
     [#endif EVENTS#]

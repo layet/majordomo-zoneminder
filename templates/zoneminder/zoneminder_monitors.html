@@ -4,7 +4,83 @@
     $("#editMonitorForm > div > div > input[name='monitor']").val(id);
   }
 </script>
+<style>
+  div[style="display: grid;"] {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    row-gap: 8px;
+  }
 
+  @media (max-width: 1000px) {
+    div[style="display: grid;"] {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+
+  .zm-grid-element {
+    border-bottom: 1px solid #CCCCCC;
+  }
+
+  .zm-bold {
+    font-weight: bold;
+  }
+</style>
+<div style="display: grid;">
+  <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_ID#></div>
+  <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_NAME#></div>
+  <div class="zm-bold zm-grid-element" style="text-align: center"><#LANG_ZONEMINDER_COLUMN_FUNCTION#></div>
+  <div class="zm-bold zm-grid-element"><#LANG_ZONEMINDER_COLUMN_SOURCE#></div>
+  <div class="zm-bold zm-grid-element" style="text-align: center"><#LANG_ZONEMINDER_COLUMN_HOUR#></div>
+  <div class="zm-bold zm-grid-element" style="text-align: center"><#LANG_ZONEMINDER_COLUMN_DAY#></div>
+  <div class="zm-bold zm-grid-element" style="text-align: center"><#LANG_ZONEMINDER_COLUMN_WEEK#></div>
+  <div class="zm-bold zm-grid-element" style="text-align: center"><#LANG_ZONEMINDER_COLUMN_MONTH#></div>
+  <!--<div class="zm-bold" style="text-align: center"><#LANG_ZONEMINDER_COLUMN_ENABLED#></div>-->
+  [#begin MONITORS#]
+    <div class="zm-grid-element">[#Id#]</div>
+    <div class="zm-grid-element">
+      <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
+        <div><img src="/camera.php?scale=3&id=[#Id#]" width="48" height="27"></div>
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 16px;">
+          <div style="width: 14px; height: 14px; border-radius: 7px; background: [#monitor_color#];"></div>
+          <a style="font-weight: 600;" href="?view_mode=monitor&monitor=[#Id#]">[#Name#]</a>
+          <div data-toggle="modal" data-target="#editMonitor" style="cursor: pointer;" onclick="fillUpdateForm([#Id#], '[#Name#]');"><i class="glyphicon glyphicon-edit"></i></div>
+        </div>
+      </div>
+    </div>
+    <div class="zm-grid-element" style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span style="font-weight: 600;">[#Function#]</span>
+        <span style="font-size: 0.8em;">[#CaptureFPS#] fps&nbsp;[#CaptureBandwidth#]</span>
+      </div>
+    </div>
+    <div class="zm-grid-element">[#IP#]</div>
+    <div class="zm-grid-element" style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span><a href="?view_mode=events&monitor=[#Id#]&mode=hour&monitorname=[#Name#]">[#HourEvents#]</a></span>
+        <span style="font-size: 0.8em;">[#HourEventDiskSpace#]</span>
+      </div>
+    </div>
+    <div class="zm-grid-element" style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span><a href="?view_mode=events&monitor=[#Id#]&mode=day&monitorname=[#Name#]">[#DayEvents#]</a></span>
+        <span style="font-size: 0.8em;">[#DayEventDiskSpace#]</span>
+      </div>
+    </div>
+    <div class="zm-grid-element" style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span><a href="?view_mode=events&monitor=[#Id#]&mode=week&monitorname=[#Name#]">[#WeekEvents#]</a></span>
+        <span style="font-size: 0.8em;">[#WeekEventDiskSpace#]</span>
+      </div>
+    </div>
+    <div class="zm-grid-element" style="text-align: center">
+      <div style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+        <span><a href="?view_mode=events&monitor=[#Id#]&mode=month&monitorname=[#Name#]">[#MonthEvents#]</a></span>
+        <span style="font-size: 0.8em;">[#MonthEventDiskSpace#]</span>
+      </div>
+    </div>
+    <!--<div style="text-align: center"><input type="checkbox" [#if Enabled="1"#]checked[#endif#] onclick="return false;"></div>-->
+  [#end MONITORS#]
+</div>
+<!--
 <table align=center class="table table-hover table-condensed table-responsive" style="margin-top: 1em;">
   <thead>
   <tr>
@@ -103,7 +179,7 @@
   </tr>
   </tbody>
 </table>
-
+-->
 <div class="modal fade" id="editMonitor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
