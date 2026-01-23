@@ -168,7 +168,7 @@ class zoneminder extends module {
                 $out['EVENTS'][] = convertStdClassToArray($event->Event);
             }
         }
-        //$out["DEBUG"] = print_r($out['EVENTS'], true);
+        $out["DEBUG"] = print_r($this->fetchMonitors(), true);
     }
 
     /**
