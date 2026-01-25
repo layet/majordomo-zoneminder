@@ -65,9 +65,6 @@ class zoneminder extends module {
         if (isset($page)) {
             $p["page"]=$this->page;
         }
-        /*if (isset($interval)) {
-            $p["interval"]=$this->interval;
-        }*/
         return parent::saveParams($p);
     }
     /**
@@ -82,6 +79,7 @@ class zoneminder extends module {
         global $mode;
         global $view_mode;
         global $monitor;
+        global $monitors;
         global $monitorname;
         global $eventid;
         global $page;
@@ -99,6 +97,9 @@ class zoneminder extends module {
         }
         if (isset($monitor)) {
             $this->monitor=$monitor;
+        }
+        if (isset($monitors)) {
+            $this->monitors=$monitors;
         }
         if (isset($monitorname)) {
             $this->monitorname=$monitorname;
@@ -156,19 +157,29 @@ class zoneminder extends module {
      * @access public
      */
     function usual(&$out) {
-        $monitor = $this->fetchMonitor($this->monitor);
-        $out["monitor"] = $this->monitor;
-        $out["name"] = $monitor->Monitor->Name;
-        if (isset($this->scale)) $out["scale"] = $this->scale; else $out["scale"] = 100;
-        if (isset($this->interval)) $out["interval"] = $this->interval; else $out["interval"] = 1000;
-        if (isset($this->showeventlist)) {
-            $events = $this->fetchEvents($this->monitor, 'day', 1);
-            foreach ($events->events as $event) {
-                $event->Event->Length = $this->secondsToHMS((int)$event->Event->Length);
-                $out['EVENTS'][] = convertStdClassToArray($event->Event);
+        if ($this->view_mode == '') {
+            $monitor = $this->fetchMonitor($this->monitor);
+            $out["monitor"] = $this->monitor;
+            $out["name"] = $monitor->Monitor->Name;
+            if (isset($this->showeventlist)) {
+                $events = $this->fetchEvents($this->monitor, 'day', 1);
+                foreach ($events->events as $event) {
+                    $event->Event->Length = $this->secondsToHMS((int)$event->Event->Length);
+                    $out['EVENTS'][] = convertStdClassToArray($event->Event);
+                }
             }
         }
-        $out["DEBUG"] = print_r($this->fetchMonitors(), true);
+
+        if ($this->view_mode == 'mobile') {
+            $out["monitors"] = $this->monitors;
+            if (isset($this->showeventlist)) $out["showeventlist"] = $this->showeventlist;
+        }
+
+        if (isset($this->scale)) $out["scale"] = $this->scale; else $out["scale"] = 100;
+        if (isset($this->interval)) $out["interval"] = $this->interval; else $out["interval"] = 1000;
+
+
+        $out['DEBUG'] = print_r($out["monitors"], true);
     }
 
     /**
