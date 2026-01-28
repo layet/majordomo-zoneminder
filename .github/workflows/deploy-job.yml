@@ -15,9 +15,9 @@ jobs:
           cp -r /home/stellar/github/majordomo-zoneminder-develop/. /var/www/html/
           date "+%H:%M %d.%m.%Y" > /var/www/html/cms/modules_installed/zoneminder.installed
           find /home/stellar/github/majordomo-zoneminder-develop > /var/www/html/cms/modules_installed/zoneminder.installed
+      - name: Run DB Install
+        run: php -f "/home/stellar/github/majordomo-zoneminder-develop/deploy/dbInstall.php"
       - name: Remove temp files
         run: |
           rm -rf /home/stellar/github/majordomo-zoneminder-develop
           rm /home/stellar/github/develop.tar.gz
-      - name: Run DB Install
-        run: php -f "/home/stellar/github/majordomo-zoneminder-develop/deploy/dbInstall.php"
