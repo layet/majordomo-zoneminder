@@ -1,6 +1,8 @@
 name: Majordomo-test deploy
 on:
   push:
+    branches:
+      - develop
 
 jobs:
   deploy:
