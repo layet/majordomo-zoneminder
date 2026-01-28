@@ -7,4 +7,4 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Download develop artifact
-        run:  curl -o /home/stellar/github/develop.tar.gz https://github.com/layet/majordomo-zoneminder/archive/develop.tar.gz
+        run:  curl -L https://github.com/layet/majordomo-zoneminder/archive/develop.tar.gz > /home/stellar/github/develop.tar.gz
