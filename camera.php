@@ -35,5 +35,17 @@ if ($source != '') {
         if ($eventid == '') $eventid = 0;
         $zm->videoMPEG($eventid);
     }
+
+    if ($source == 'eventlist') {
+        if ($monitor == '') $monitor = 1;
+
+        echo json_encode($zm->fetchEvents($monitor, 'day')->events);
+    }
+
+    if ($source == 'monitor') {
+        if ($monitor == '') $monitor = 1;
+
+        echo json_encode($zm->fetchMonitor($monitor));
+    }
 }
 ?>

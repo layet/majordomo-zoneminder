@@ -1,0 +1,233 @@
+<style>
+    .zm-background {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .zm-cam-name {
+        font-family: Roboto Condensed;
+        font-size: 36px;
+        color: #EAEAEA;
+        margin-top: 48px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 16px 8px 16px;
+        box-sizing: border-box;
+        border: 1px solid rgba(205, 209, 220, 0.1);
+        border-radius: 24px;
+        background: linear-gradient(270.00deg, rgba(31, 44, 81, 1),rgba(31, 44, 81, 1),rgba(0, 0, 0, 1));
+    }
+
+    .zm-cam-controls {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 8px;
+    }
+
+    .zm-img {
+        position: fixed;
+        z-index: -1;
+    }
+
+    .zm-cam-events {
+        display: flex;
+        flex-direction: row-reverse;
+        width: 100%;
+        margin-right: 16px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    .zm-cam-event {
+        width: 128px;
+        height: 72px;
+        box-sizing: border-box;
+        border: 1px solid rgba(242, 149, 87, 1);
+        border-radius: 6px;
+        margin-bottom: 8px;
+        background-color: white;
+        flex-shrink: 0;
+        margin-left: -48px;
+    }
+
+    .eventViewer {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        border: 1px solid rgba(242, 149, 87, 1);
+        border-radius: 6px;
+        background-color: white;
+    }
+
+    .zm-viewer-close-btn {
+        width: 32px;
+        height: 32px;
+        position: fixed;
+        top: 1%;
+        background-color: white;
+        border-radius: 16px;
+        z-index: 2;
+        padding: 4px;
+    }
+    
+    @media (orientation: landscape) {
+        .zm-img {
+            top: -30%;
+        }
+
+        .zm-cam-name {
+            margin-top: 8px;
+        }
+
+        .zm-viewer-close-btn {
+            left: 95%;
+        }
+    }
+
+    @media (orientation: portrait) {
+        .zm-viewer-close-btn {
+            left: 90%;
+        }
+    }
+</style>
+<div class="zm-background">
+    <div class="zm-img">
+        <img id="videoStream" src="/camera.php?id=[#monitor#]&scale=[#scale#]" data-src="/camera.php?id=[#monitor#]&scale=[#scale#]" >
+    </div>
+    <div class="eventViewer">
+        <div class="zm-viewer-close-btn" onclick="$('.eventViewer').hide();">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24.000000" height="24.000000" fill="none">
+                <rect id="close" width="24.000000" height="24.000000" x="0.000000" y="0.000000" />
+                <path id="Icon" d="M18.41 5.59002C19.1967 6.37672 19.1967 7.65221 18.41 8.4389L15.205 11.6439C15.0083 11.8406 15.0083 12.1594 15.205 12.3561L18.41 15.5611C19.1967 16.3478 19.1967 17.6233 18.41 18.41C17.6233 19.1967 16.3478 19.1967 15.5611 18.41L12.3561 15.205C12.1594 15.0083 11.8406 15.0083 11.6439 15.205L8.4389 18.41C7.6522 19.1967 6.37672 19.1967 5.59002 18.41C4.80333 17.6233 4.80333 16.3478 5.59002 15.5611L8.79501 12.3561C8.99169 12.1594 8.99169 11.8406 8.79501 11.6439L5.59002 8.4389C4.80333 7.6522 4.80333 6.37672 5.59002 5.59002C6.37672 4.80333 7.65221 4.80333 8.4389 5.59002L11.6439 8.79501C11.8406 8.99169 12.1594 8.99169 12.3561 8.79501L15.5611 5.59002C16.3478 4.80333 17.6233 4.80333 18.41 5.59002Z" fill-rule="nonzero" stroke="rgb(66,66,66)" stroke-width="2" />
+            </svg>
+        </div>
+        <div style="display: flex;">
+            <video id="eventVideo" style="width: 100%;" controls="controls" autoplay="" style="transform: matrix(1, 0, 0, 1, 0, 0);"
+                   preload="auto" src="" data-src="/camera.php?source=mpeg&eid=">
+            </video>
+            <img id="eventMJPEG" src="" style="width: 100%;" data-src="/camera.php?source=mjpeg&eid=">
+        </div>
+    </div>
+    <div class="zm-cam-name"></div>
+    <div class="zm-cam-controls">
+        [#if monitors#]
+        <svg id="zmBtnPrev" onclick="zm_prevMonitor();" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" customFrame="#000000">
+            <defs>
+                <linearGradient id="paint_linear_0" x1="48" x2="0" y1="24" y2="24" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="rgb(31,44,81)" offset="0" stop-opacity="1" />
+                    <stop stop-color="rgb(31,44,81)" offset="0.5" stop-opacity="1" />
+                    <stop stop-color="rgb(0,0,0)" offset="1" stop-opacity="1" />
+                </linearGradient>
+                <clipPath id="clipPath_0">
+                    <rect width="32.000000" height="32.000000" x="8.000000" y="8.000000" fill="rgb(255,255,255)" />
+                </clipPath>
+            </defs>
+            <g id="btnPrev">
+                <circle id="Oval 2" cx="24" cy="24" r="24" fill="url(#paint_linear_0)" />
+                <circle id="Oval 2" cx="24" cy="24" r="23.5" stroke="rgb(205,209,220)" stroke-opacity="0.560000002" stroke-width="1.000000" />
+                <g id="chevron/left" clip-path="url(#clipPath_0)" customFrame="url(#clipPath_0)">
+                    <rect id="chevron/left" width="32.000000" height="32.000000" x="8.000000" y="8.000000" />
+                    <path id="Icon" d="M26.6666 16L19.6095 23.0572C19.0888 23.5779 19.0888 24.4221 19.6095 24.9428L26.6666 32" stroke="rgb(234,234,234)" stroke-linecap="round" stroke-width="2.000000" />
+                </g>
+            </g>
+        </svg>
+        <svg id="zmBtnNext" onclick="zm_nextMonitor();" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" customFrame="#000000">
+            <defs>
+                <linearGradient id="paint_linear_1" x1="48" x2="0" y1="24" y2="24" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="rgb(31,44,81)" offset="0" stop-opacity="1" />
+                    <stop stop-color="rgb(31,44,81)" offset="0.5" stop-opacity="1" />
+                    <stop stop-color="rgb(0,0,0)" offset="1" stop-opacity="1" />
+                </linearGradient>
+                <clipPath id="clipPath_1">
+                    <rect width="32.000000" height="32.000000" x="8.000000" y="8.000000" fill="rgb(255,255,255)" />
+                </clipPath>
+            </defs>
+            <g id="btnNext">
+                <circle id="Oval 2" cx="24" cy="24" r="24" fill="url(#paint_linear_1)" />
+                <circle id="Oval 2" cx="24" cy="24" r="23.5" stroke="rgb(205,209,220)" stroke-opacity="0.660000026" stroke-width="1.000000" />
+                <g id="chevron/right" clip-path="url(#clipPath_1)" customFrame="url(#clipPath_1)">
+                    <rect id="chevron/right" width="32.000000" height="32.000000" x="8.000000" y="8.000000" />
+                    <path id="Icon" d="M21.3333 16L28.3904 23.0572C28.9111 23.5779 28.9111 24.4221 28.3904 24.9428L21.3333 32" stroke="rgb(234,234,234)" stroke-linecap="round" stroke-width="2.000000" />
+                </g>
+            </g>
+        </svg>
+        [#endif monitors#]
+    </div>
+    <div class="zm-cam-events">
+
+    </div>
+</div>
+
+<script>
+    var videoStreamTimer = setInterval(function () {
+        var $img = $('#videoStream');
+        $img.attr('src', $img.attr('data-src')+'&rand='+Math.random());
+    }, [#interval#]);
+
+    monitors = "[#monitors#]".split(",");
+    current_monitor = 0;
+    $("#zmBtnPrev").css("visibility", "hidden");
+    zm_refreshMonitor();
+
+    function zm_refreshMonitor() {
+        $.getJSON('/camera.php?source=monitor&id='+monitors[current_monitor], function (data) {
+            $("#videoStream").attr("data-src", "/camera.php?id="+monitors[current_monitor]+"&scale=[#scale#]");
+            $("#videoStream").attr("src", "/camera.php?id="+monitors[current_monitor]+"&scale=[#scale#]");
+            $(".zm-cam-name").html(data.Monitor.Name);
+        });
+
+        [#if showeventlist#]
+        $.getJSON('/camera.php?source=eventlist&id='+monitors[current_monitor], function (data) {
+            $(".zm-cam-events").empty();
+            $.each( data, function( key, val ) {
+                $(".zm-cam-events").append("<div class='zm-cam-event' style=\"background-image: url('/camera.php?source=thumbnail&eid="
+                    +val.Event.Id+"&width=128&height=72')\" onclick='zm_playEvent("+val.Event.Id+", "+val.Event.Videoed+");'></div>");
+            });
+        });
+        [#endif showeventlist#]
+    }
+
+    function zm_prevMonitor() {
+        current_monitor = current_monitor - 1;
+        if (current_monitor == -1) current_monitor = 0;
+
+        if (current_monitor == 0) $("#zmBtnPrev").css("visibility", "hidden");
+            else $("#zmBtnPrev").css("visibility", "visible");
+        $("#zmBtnNext").css("visibility", "visible");
+        zm_refreshMonitor();
+    }
+
+    function zm_nextMonitor() {
+        current_monitor = current_monitor + 1;
+        if (current_monitor == monitors.length) current_monitor = monitors.length-1;
+        if (current_monitor == monitors.length-1) $("#zmBtnNext").css("visibility", "hidden");
+            else $("#zmBtnNext").css("visibility", "visible");
+        $("#zmBtnPrev").css("visibility", "visible");
+        zm_refreshMonitor();
+    }
+
+    function zm_playEvent(id, videoed) {
+        $("#eventVideo").hide();
+        $("#eventMJPEG").hide();
+        if (videoed == 1) {
+            $("#eventVideo").attr("src", $("#eventVideo").attr("data-src") + id);
+            $("#eventVideo").show();
+        }  else {
+            $("#eventMJPEG").attr("src", $("#eventMJPEG").attr("data-src") + id);
+            $("#eventMJPEG").show();
+        }
+        $('.eventViewer').show();
+    }
+
+</script>
