@@ -1,0 +1,10 @@
+name: Majordomo-test deploy
+on:
+  push:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Download develop artifact
+        run:  curl -o /home/stellar/github/develop.tar.gz https://github.com/layet/majordomo-zoneminder/archive/develop.tar.gz
