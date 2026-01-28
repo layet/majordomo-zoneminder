@@ -8,3 +8,5 @@ jobs:
     steps:
       - name: Download develop artifact
         run:  curl -L https://github.com/layet/majordomo-zoneminder/archive/develop.tar.gz > /home/stellar/github/develop.tar.gz
+      - name: Unpack develop artifact
+        run: tar -xzvf /home/stellar/github/develop.tar.gz -C /home/stellar/github
