@@ -1,0 +1,25 @@
+name: Majordomo-test deploy
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Download develop artifact
+        run:  curl -L https://github.com/layet/majordomo-zoneminder/archive/develop.tar.gz > /home/stellar/github/develop.tar.gz
+      - name: Unpack develop artifact
+        run: tar -xzvf /home/stellar/github/develop.tar.gz -C /home/stellar/github
+      - name: Copy artifact files
+        run: |
+          cp -r /home/stellar/github/majordomo-zoneminder-develop/. /var/www/html/
+          date "+%H:%M %d.%m.%Y" > /var/www/html/cms/modules_installed/zoneminder.installed
+          find /home/stellar/github/majordomo-zoneminder-develop > /var/www/html/cms/modules_installed/zoneminder.files
+      - name: Run DB Install
+        run: php -f "/home/stellar/github/majordomo-zoneminder-develop/deploy/dbInstall.php"
+      - name: Remove temp files
+        run: |
+          rm -rf /home/stellar/github/majordomo-zoneminder-develop
+          rm /home/stellar/github/develop.tar.gz
