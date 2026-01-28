@@ -11,7 +11,7 @@ jobs:
       - name: Unpack develop artifact
         run: tar -xzvf /home/stellar/github/develop.tar.gz -C /home/stellar/github
       - name: Copy artifact files
-        run: cp -af /home/stellar/github/majordomo-zoneminder-develop/. /var/www/html/
+        run: cp -af /home/stellar/github/majordomo-zoneminder-develop/. /var/www/html/ 2>/dev/null
       - name: Remove temp files
         run: |
           rm -rf /home/stellar/github/majordomo-zoneminder-develop
